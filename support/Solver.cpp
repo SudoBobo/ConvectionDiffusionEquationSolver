@@ -1,20 +1,20 @@
-#include "Solver.h"
+#include "support/Solver.h"
 
-Solver();
-Solver (SystemSolver * systemSolver, Conditions & conditions, a, b, T)
-{
-	//тут хорошо бы менять лимитеры, потоки и начальные условия
-	//создаём райтеры, ероры, осущетсвляем осуществялем обмен между ст
-}
+//Solver();
+//Solver (SystemSolver * systemSolver, Conditions & conditions, a, b, T)
+//{
+//	//тут хорошо бы менять лимитеры, потоки и начальные условия
+//	//создаём райтеры, ероры, осущетсвляем осуществялем обмен между ст
+//}
 
-protected:
-State m_origState;
-State m_newState;
-Conditions * m_conditions;
+//protected:
+//State m_origState;
+//State m_newState;
+//Conditions * m_conditions;
 
-FileWriter m_numericalFileWriter;
-FileWriter m_analyticalFileWriter;
-FileWriter m_errorFileWriter;
-{
+//FileWriter m_numericalFileWriter;
+//FileWriter m_analyticalFileWriter;
+//FileWriter m_errorFileWriter;
+//{
 
-}
+//}

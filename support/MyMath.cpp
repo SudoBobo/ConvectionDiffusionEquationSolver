@@ -1,4 +1,5 @@
 #include "MyMath.h"
+#include <cmath>
 
 double calcAvgValue(const double spatialStep,
 				 const Polynomial &u)
@@ -62,7 +63,7 @@ double m(double a, double b, double c, double d)
 
 
 //??
-double mTilda(double a, double b, double c)
+double mForBMLimiters(double a, double b, double c)
 {
 	if ((sgn(a) == sgn(b)) && (sgn(b) == sgn(c)))
 	{

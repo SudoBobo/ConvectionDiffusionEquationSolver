@@ -15,8 +15,8 @@ MUSCLLimiter::MUSCLLimiter(Conditions *conditions, const int k):
 
 
 
-double * MUSCLLimiter::limit(const double * uPrev, const double * u,
-				 const double * uNext, const int jPrev, const int j, const int jNext) const
+Polynomial MUSCLLimiter::limit(const Polynomial & uPrev, const Polynomial & u,
+											  const Polynomial & uNext) const
 {
 
 	static const double h = m_conditions->getSpatialStep();
@@ -25,12 +25,13 @@ double * MUSCLLimiter::limit(const double * uPrev, const double * u,
 	static double v;
 	static double vNext;
 
-	vPrev = calcAvgValue(m_k, jPrev, h, uPrev);
-	v = calcAvgValue(m_k, j, h, u);
-	vNext = calcAvgValue(m_k, jNext, h, uPrev);
+//	vPrev = calcAvgValue(m_k, jPrev, h, uPrev);
+//	v = calcAvgValue(m_k, j, h, u);
+//	vNext = calcAvgValue(m_k, jNext, h, uPrev);
 
-	const int size = m_k + 1;
-	double limitedCoefs [size];
-	limited
+//	const int size = m_k + 1;
+//	double limitedCoefs [size];
+//	limited
+	return u;
 
 }

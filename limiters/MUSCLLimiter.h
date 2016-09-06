@@ -8,8 +8,8 @@ class MUSCLLimiter: public Limiter
 {
 public:
 	MUSCLLimiter(Conditions * conditions, const int k);
-	double * limit(const double * uPrev, const double * u,
-					 const double * uNext, const int jPrev, const int j, const int jNext) const;
+	Polynomial limit(const Polynomial & uPrev, const Polynomial & u,
+						 const Polynomial & uNext) const;
 };
 
 #endif // MUSCLLIMITER_H

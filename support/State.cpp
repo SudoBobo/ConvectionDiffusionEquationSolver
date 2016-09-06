@@ -69,20 +69,30 @@ double State::operator()(int i, int j, int k) const
 		return m_state[i][j][k];
 }
 
-const double * State::operator()(int i, int j) const
+Polynomial State::operator()(int i, int j) const
 {
 		if((i > m_iSize) || (j > m_jSize) ||(i < 0)||(j<0))
 				throw std::range_error("Try to get an access to point that doesn't exist");
 
-		return m_state[i][j];
+		Polynomial temp(m_state[i][j], i, m_kSize - 1);
+		return temp;
 }
 
-double * State::operator ()(int i, int j) const
+void State::operator ()(int i, int j, Polynomial & newPolynomial)
 {
 	if((i > m_iSize) || (j > m_jSize) ||(i < 0)||(j<0))
 			throw std::range_error("Try to get an access to point that doesn't exist");
 
-	return m_state[i][j];
+	static int polynomialSize;
+	polynomialSize = newPolynomial.getOrder() + 1;
+
+	if (polynomialSize != m_kSize)
+		throw std::range_error("Try to assign polynomial of a wrong size");
+
+	for (int l = 0; l < m_kSize; l++)
+	{
+		m_state[i][j][l] = newPolynomial(l);
+	}
 }
 
 double & State::operator()(int i, int j, int k)
@@ -193,8 +203,8 @@ std::vector <double> State::makeValueVector(const int j) const
 	{
 		for (int i = 0; i < value.size(); i++)
 		{
-			value[i] = calcAvgValue(1, j, m_conditions->getSpatialStep(),
-									this->operator ()(i, j));
+			value[i] = 42; /*calcAvgValue(1, j, m_conditions->getSpatialStep(),
+									this->operator ()(i, j));*/
 		}
 		return value;
 	}

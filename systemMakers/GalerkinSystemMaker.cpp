@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include "MyMath.h"
+#include "support/MyMath.h"
 
 GalerkinSystemMaker::GalerkinSystemMaker(Problem * problem,
 										 Conditions * conditions, Stream *stream,
@@ -22,16 +22,17 @@ double GalerkinSystemMaker::dU(const int l, const int j,
 
 	static const double spatialStep = m_conditions->getSpatialStep();
 
-	uValue = calcAvgValue(m_k, j, spatialStep, u);
-	uPrevValue =  calcAvgValue(m_k, j - 1, spatialStep, uPrev);
-	uNextValue =  calcAvgValue(m_k, j + 1, spatialStep, uNext);
+//	uValue = calcAvgValue(m_k, j, spatialStep, u);
+//	uPrevValue =  calcAvgValue(m_k, j - 1, spatialStep, uPrev);
+//	uNextValue =  calcAvgValue(m_k, j + 1, spatialStep, uNext);
 
-	double integral = integral23(m_k, j, l, spatialStep, u);
+//	double integral = integral23(m_k, j, l, spatialStep, u);
 
-	return ((2.0 * l + 1.0) / m_conditions->getSpatialStep()) *
-					 (
-					   (integral) - (m_stream->operator ()(uValue, uNextValue) -
-							std::pow(-1.0, l) *
-							m_stream->operator ()(uPrevValue, uNextValue))
-					 );
+//	return ((2.0 * l + 1.0) / m_conditions->getSpatialStep()) *
+//					 (
+//					   (integral) - (m_stream->operator ()(uValue, uNextValue) -
+//							std::pow(-1.0, l) *
+//							m_stream->operator ()(uPrevValue, uNextValue))
+//					 );
+	return 42;
 }

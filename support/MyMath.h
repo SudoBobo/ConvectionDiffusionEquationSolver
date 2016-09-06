@@ -1,6 +1,8 @@
 #ifndef MYMATH_H
 #define MYMATH_H
 
+#include "support/Polynomial.h"
+
 //вычисляет среднее значение величины u по промежутку j
 //это значение также используется как численное значение u в точке x(j)
 double calcAvgValue(const double spatialStep,
@@ -13,7 +15,7 @@ double integral23(const int k, const int j, const int l, const double spatialSte
 double m(double a, double b);
 double m (double a, double b, double c);
 double m(double a, double b, double c, double d);
-double mTilda (double a, double b, double c);
+double mForBMLimiters (double a, double b, double c);
 int sgn (double val);
 
 #endif // MYMATH_H

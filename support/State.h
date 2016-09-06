@@ -2,6 +2,7 @@
 #define STATE_H
 
 #include "support/Conditions.h"
+#include "support/Polynomial.h"
 #include <vector>
 
 //checked
@@ -18,9 +19,9 @@ public:
 	State & operator = (const State & anotherState);
 
 	double     operator ()  (int i, int j, int k) const;
-	const double *   operator ()  (int i, int j) const;
+	Polynomial  operator ()  (int i, int j) const;
 	double & operator()  (int i, int j, int k);
-	double * operator () (int i, int j);
+	void operator ()(int i, int j, Polynomial &newPolynomial);
 
 	std::vector <double> makeValueVector(const int j) const;
 	int valueVectorSize() const;

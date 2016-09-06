@@ -1,17 +1,18 @@
 #ifndef SOLVER_H
 #define SOLVER_H
 
-#include <SystemSolver.h>
-#include <Conditions.h>
-#include <FileWriter.h>
-#include <State.h>
+#include <systemSolvers/SystemSolver.h>
+#include <support/Conditions.h>
+#include <support/FileWriter.h>
+#include <support/State.h>
 // #include <GNUPlotMaker.h>
 
 class Solver
 {
 public:
 	Solver();
-	Solver (SystemSolver * systemSolver, Conditions & conditions, a, b, T);
+	Solver (SystemSolver * systemSolver, Conditions & conditions,
+			const double a, const double b, const double T);
 protected:
 	State m_origState;
 	State m_newState;
@@ -24,4 +25,4 @@ protected:
 	//GNUPlotMaker m_GNUPlotMaker;
 };
 
-//#endif // SOLVER_H
+#endif // SOLVER_H
