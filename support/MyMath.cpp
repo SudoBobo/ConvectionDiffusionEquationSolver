@@ -1,15 +1,42 @@
 #include "MyMath.h"
 #include <cmath>
+#include <iostream>
 
 double calcAvgValue(const double spatialStep,
 				 const Polynomial &u)
 {
-	//calcValue
 	//вычисление среднего значения по промежутку от j- 1/2 до j + 1/2
-	// u_k = sum (u_j * phi_l)
-	// int (u_k) dx from x(j-1/2) to x(j+1/2)
-	// return int / h_x;
-	return 0.0;
+	// x(j), x(j+1/2), x(j-1/2)
+	static double xJ;
+	static double xJnext;
+	static double xJprev;
+
+	static int j;
+	j = u.getJ();
+
+	static double h;
+	h = spatialStep;
+
+	xJ = j * h;
+	xJnext = xJ + 0.5 * h;
+	xJprev = xJ - 0.5 * h;
+
+	std::cout << "xJ = " << xJ << " xJnext = " << xJnext <<
+				 " xJprev = " << xJprev << std::endl;
+	static int k;
+
+	k = u.getOrder();
+	switch(k)
+	{
+	case 0:
+		return u(0);
+		std::cout << "fuck you!" << std::endl;
+	case 1:
+		// works just fine, don't touch please
+		return u(0) + (u(1) / (h * h)) *
+		(xJnext * xJnext - xJprev * xJprev) -
+		 (u(1) * 2.0 * xJ / h);
+	}
 }
 
 
