@@ -8,3 +8,12 @@ SystemMaker::SystemMaker(Problem * problem, Conditions * conditions,
 	m_stream = stream;
 	m_k = k;
 }
+
+
+SystemMaker::SystemMaker(Problem * problem, Conditions * Conditions, const int k)
+{
+	m_problem = problem;
+	m_conditions = conditions;
+	m_stream = stream;
+	m_k = k;
+}

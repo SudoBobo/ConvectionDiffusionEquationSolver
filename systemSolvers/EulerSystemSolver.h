@@ -8,9 +8,12 @@ class EulerSystemSolver: public SystemSolver
 	public:
 		EulerSystemSolver(Limiter * limiter, Conditions * conditions,
 							   SystemMaker * systemMaker);
-		double * uNew(const int k, const int j,
-							  const double * uPrev, const double * u,
-							  const double * uNext) const;
+		EulerSystemSolver(Conditions * conditions);
+
+		void calcNextState(const State & currentState, State & nextState) const;
+
+	private: Polynomial uNew(const Polynomial & uPrev, const Polynomial & u,
+							  const Polynomial & uNext) const;
 };
 
 #endif // EULERSYSTEMSOLVER_H

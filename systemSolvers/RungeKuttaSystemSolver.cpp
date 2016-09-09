@@ -8,9 +8,14 @@ RungeKuttaSystemSolver::RungeKuttaSystemSolver(Limiter * limiter,
 
 }
 
-double * RungeKuttaSystemSolver::uNew(const int k, const int j,
-					  const double * uPrev, const double * u,
-					  const double * uNext) const
+//Polynomial RungeKuttaSystemSolver::uNew(const Polynomial & uPrev, const Polynomial & u,
+//					  const Polynomial & uNext) const
+//{
+//	return u;
+//}
+
+void RungeKuttaSystemSolver::calcNextState(const State & currentState,
+									   State & nextState) const
 {
-	return nullptr;
+	nextState = currentState;
 }

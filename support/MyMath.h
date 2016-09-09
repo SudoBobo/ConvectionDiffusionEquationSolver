@@ -7,8 +7,8 @@
 //это значение также используется как численное значение u в точке x(j)
 double calcAvgValue(const double spatialStep,
 				 const Polynomial & u);
-double integral23(const int k, const int j, const int l, const double spatialStep,
-				  const double * u);
+double integral23(const int l, const double spatialStep,
+				  const Polynomial &u);
 
 // m - function from limiter definition from article
 //http://keldysh.ru/papers/2005/prep105/prep2005_105.html

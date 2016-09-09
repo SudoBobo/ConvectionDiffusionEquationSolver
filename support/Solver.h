@@ -5,23 +5,29 @@
 #include <support/Conditions.h>
 #include <support/FileWriter.h>
 #include <support/State.h>
+#include <support/InitialState.h>
+
 // #include <GNUPlotMaker.h>
 
 class Solver
 {
 public:
-	Solver();
-	Solver (SystemSolver * systemSolver, Conditions & conditions,
-			const double a, const double b, const double T);
+	Solver (SystemMaker * systemMaker, SystemSolver * systemSolver,
+			Conditions * conditions);
+	void solve(Limiter * limiter, Stream * stream,
+			   InitialState * initialState);
+	void solveAll();
 protected:
+	SystemMaker  * m_systemMaker;
+	SystemSolver * m_systemSolver;
+	Conditions   * m_conditions;
+
 	State m_origState;
 	State m_newState;
-	Conditions * m_conditions;
 
 	FileWriter m_numericalFileWriter;
 	FileWriter m_analyticalFileWriter;
 	FileWriter m_errorFileWriter;
-
 	//GNUPlotMaker m_GNUPlotMaker;
 };
 

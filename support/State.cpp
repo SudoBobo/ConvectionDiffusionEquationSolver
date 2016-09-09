@@ -25,6 +25,11 @@ State::State(int iSize, int jSize, int kSize, Conditions * conditions)
 		}
 }
 
+State::State()
+{
+
+}
+
 State::State(const State & anotherState)
 {
 		this->m_iSize = anotherState.iSize();
@@ -234,4 +239,11 @@ Conditions * State::getConditions() const
 int State::valueVectorSize() const
 {
 	return m_iSize * m_kSize;
+}
+
+bool State::operator ==(const State & anotherState)
+{
+	return (((m_iSize == anotherState.iSize()) && (m_jSize == anotherState.jSize())
+			&& (m_kSize == anotherState.kSize())) &&
+			(m_conditions == anotherState.getConditions()));
 }

@@ -11,12 +11,14 @@ class State
 public:
 	// i == pointN, j == valueN, k == basisFunctionN
 	State(int iSize, int jSize, int kSize, Conditions * conditions);
+	State();
 	~State();
 	State(const State & anotherState);
 
 	State operator +(const State & anotherState) const;
 	State operator *(double coefficient) const;
 	State & operator = (const State & anotherState);
+	bool operator == (const State & anotherState);
 
 	double     operator ()  (int i, int j, int k) const;
 	Polynomial  operator ()  (int i, int j) const;

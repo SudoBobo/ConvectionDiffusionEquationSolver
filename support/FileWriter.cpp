@@ -11,6 +11,11 @@
 #include "FileWriter.h"
 #include "MyMath.h"
 
+FileWriter::FileWriter()
+{
+
+}
+
 FileWriter::FileWriter(std::vector <double> * source,
 			   std::__cxx11::string generalFileName,
 			   std::__cxx11::string generalHeaderName,

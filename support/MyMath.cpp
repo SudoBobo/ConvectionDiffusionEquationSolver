@@ -40,11 +40,49 @@ double calcAvgValue(const double spatialStep,
 }
 
 
-double integral23(const int k, const int j, const int l,
-				  const double spatialStep,
-				  const double * u)
+double integral23(const int l, const double spatialStep,
+				  const Polynomial & u)
 {
-	return 0.0;
+	static double xJ;
+	static double xJnext;
+	static double xJprev;
+
+	static int j;
+	j = u.getJ();
+
+	static double h;
+	h = spatialStep;
+
+	xJ = j * h;
+	xJnext = xJ + 0.5 * h;
+	xJprev = xJ - 0.5 * h;
+
+	static int k;
+	k = u.getOrder();
+
+
+
+	switch(k)
+	{
+	case 0:
+		return 0.0;
+	case 1:
+		if (l == 0)
+			return 0.0;
+		if (l == 1)
+		{
+			static double a;
+			static double b;
+			a = u(0);
+			b = u(1);
+			return (a * a * h) + (4.0 * a * b / h) *
+					((xJnext * xJnext - xJprev * xJprev) / 2.0 - xJ * h) +
+					(4.0 * b * b / (h * h)) *
+					((xJnext * xJnext * xJnext - xJprev * xJprev * xJprev)/3.0 -
+					 xJ * (xJnext * xJnext - xJprev * xJprev) +
+					 xJ * xJ * h);
+		}
+	}
 }
 
 

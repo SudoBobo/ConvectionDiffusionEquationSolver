@@ -14,6 +14,11 @@ Polynomial::Polynomial(const double * coefficients, const int j, const int k)
 	m_k = k;
 }
 
+Polynomial::Polynomial()
+{
+
+}
+
 Polynomial::Polynomial(const int j, const int k)
 	:m_coefficients(k+1), m_j(j), m_k(k)
 {
@@ -59,6 +64,12 @@ int Polynomial::getJ () const
 {
 	return m_j;
 }
+
+void Polynomial::setJ(const int newJ)
+{
+	m_j = newJ;
+}
+
 std::vector <double> Polynomial::getCoefficients() const
 {
 	return m_coefficients;

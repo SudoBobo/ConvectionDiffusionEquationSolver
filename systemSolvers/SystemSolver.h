@@ -4,14 +4,18 @@
 #include "limiters/Limiter.h"
 #include "support/Conditions.h"
 #include "systemMakers/SystemMaker.h"
+#include "support/Polynomial.h"
+#include "support/State.h"
 
 class SystemSolver
 {
 public:
-	SystemSolver(Limiter * limiter, Conditions * conditions, SystemMaker * systemMaker);
-	virtual double * uNew(const int k, const int j,
-						  const double * uPrev, const double * u,
-						  const double * uNext) const = 0;
+	SystemSolver(Limiter * limiter, Conditions * conditions,
+				 SystemMaker * systemMaker);
+	SystemSolver(Conditions * conditions);
+	virtual void calcNextState(const State & currentState, State & nextState) const = 0;
+//	virtual Polynomial uNew(const Polynomial & uPrev, const Polynomial & u,
+//						  const Polynomial & uNext) const = 0;
 protected:
 	Limiter * m_limiter;
 	Conditions * m_conditions;

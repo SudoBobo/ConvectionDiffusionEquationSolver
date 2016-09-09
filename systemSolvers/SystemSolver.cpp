@@ -8,3 +8,8 @@ SystemSolver::SystemSolver(Limiter *limiter, Conditions *conditions,
 	m_systemMaker = systemMaker;
 }
 
+SystemSolver::SystemSolver(Conditions *conditions)
+{
+	m_conditions = conditions;
+}
+

@@ -24,7 +24,8 @@ SOURCES += main.cpp \
     systemSolvers/EulerSystemSolver.cpp \
     systemSolvers/RungeKuttaSystemSolver.cpp \
     systemSolvers/SystemSolver.cpp \
-    support/Polynomial.cpp
+    support/Polynomial.cpp \
+    support/InitialState.cpp
 
 HEADERS += \
     limiters/Limiter.h \
@@ -47,5 +48,6 @@ HEADERS += \
     systemSolvers/EulerSystemSolver.h \
     systemSolvers/RungeKuttaSystemSolver.h \
     systemSolvers/SystemSolver.h \
-    support/Polynomial.h
+    support/Polynomial.h \
+    support/InitialState.h
 
