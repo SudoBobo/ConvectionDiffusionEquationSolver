@@ -13,12 +13,15 @@ class SystemMaker
 public:
 	SystemMaker( Problem * problem, Conditions * conditions, Stream * stream,
 				 const int k);
-	SystemMaker(Problem * problem, Conditions * Conditions, const int k);
+	SystemMaker(Problem * problem, Conditions * conditions, const int k);
 
 	virtual double dU(const int l, const Polynomial &  uPrev,
 					  const Polynomial & u,
 					  const Polynomial & uNext) const = 0;
-	virtual std::string name() const = 0;
+	virtual std::string getName() const = 0;
+
+	void setStream(Stream * newStream);
+	int getK() const;
 
 protected:
 	Conditions * m_conditions;

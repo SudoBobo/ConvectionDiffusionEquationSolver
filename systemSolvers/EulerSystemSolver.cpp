@@ -76,3 +76,8 @@ Polynomial EulerSystemSolver::uNew(const Polynomial & uPrev, const Polynomial & 
 	}
 	return m_limiter->limit(uPrev, uTemp, uNext);
 }
+
+std::string EulerSystemSolver::getName() const
+{
+	return "Euler";
+}

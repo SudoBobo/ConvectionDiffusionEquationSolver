@@ -3,6 +3,7 @@
 
 #include "support/Conditions.h"
 #include "support/Polynomial.h"
+#include "support/State.h"
 #include <vector>
 
 //checked
@@ -18,6 +19,7 @@ public:
 	State operator +(const State & anotherState) const;
 	State operator *(double coefficient) const;
 	State & operator = (const State & anotherState);
+//	State & operator = (const InitialState & initialState);
 	bool operator == (const State & anotherState);
 
 	double     operator ()  (int i, int j, int k) const;

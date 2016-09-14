@@ -1,4 +1,4 @@
-#include "MyMath.h"
+#include "support/MyMath.h"
 #include <cmath>
 #include <iostream>
 
@@ -37,6 +37,8 @@ double calcAvgValue(const double spatialStep,
 		(xJnext * xJnext - xJprev * xJprev) -
 		 (u(1) * 2.0 * xJ / h);
 	}
+	std::range_error("something went wrong in calculating average interval value");
+	return 0;
 }
 
 
@@ -83,6 +85,8 @@ double integral23(const int l, const double spatialStep,
 					 xJ * xJ * h);
 		}
 	}
+	std::range_error("something went wrong in calculating integral 2.3");
+	return 0;
 }
 
 

@@ -8,8 +8,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "FileWriter.h"
-#include "MyMath.h"
+#include "support/FileWriter.h"
+#include "support/MyMath.h"
 
 FileWriter::FileWriter()
 {
@@ -65,7 +65,7 @@ void FileWriter::write(const int stepNumber) const
 			pName += std::to_string(stepNumber);
 			pName += ".pvtr";
 
-			std::ofstream foutP(m_path + pName);
+			std::ofstream foutP(m_path + m_directory + pName);
 			foutP  << "<?xml version=\"1.0\"?>\n" <<
 			"<VTKFile type=\"PRectilinearGrid\" version=\"0.1\" byte_order=\"LittleEndian\">\n" <<
 			"<PRectilinearGrid WholeExtent=\"0 " << m_gridSize[0]  <<" 0 " << m_gridSize[1]  <<  " 0 " << m_gridSize[2] << "\" GhostLevel=\"0\">\n" <<
@@ -83,7 +83,7 @@ void FileWriter::write(const int stepNumber) const
 			"</VTKFile>";
 			foutP.close();
 
-			std::ofstream foutN(m_path + fName);
+			std::ofstream foutN(m_path + m_directory + fName);
 			foutN.precision(m_precision);
 			foutN  << "<?xml version=\"1.0\"?>\n" <<
 			"<VTKFile type=\"RectilinearGrid\" version=\"0.1\" byte_order=\"LittleEndian\">\n" <<
@@ -113,4 +113,49 @@ void FileWriter::write(const int stepNumber) const
 			"</RectilinearGrid>\n" <<
 			"</VTKFile>\n";
 			foutN.close();
+}
+
+
+void FileWriter::setPath(std::string newPath)
+{
+	m_path = newPath;
+}
+
+std::string FileWriter::getPath() const
+{
+	return m_path;
+}
+void FileWriter::setDirectory(std::string newDirectory)
+{
+	m_directory = newDirectory;
+}
+
+void FileWriter::setGeneralFileName(std::string newGeneralFileName)
+{
+	m_generalFileName = newGeneralFileName;
+}
+
+void FileWriter::setGeneralHeaderName(std::string newGeneralHeaderName)
+{
+	m_generalHeaderName = newGeneralHeaderName;
+}
+
+void FileWriter::setPrecision (const int newPrecision)
+{
+	m_precision = newPrecision;
+}
+
+void FileWriter::setGridSize(std::vector <int> newGridSize)
+{
+	m_gridSize = newGridSize;
+}
+
+void FileWriter::setSource(std::vector<double> newSource)
+{
+	m_source = &newSource;
+}
+
+void FileWriter::setSource(std::vector<double> * newSource)
+{
+	m_source = newSource;
 }

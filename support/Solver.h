@@ -16,7 +16,9 @@ public:
 			Conditions * conditions);
 	void solve(Limiter * limiter, Stream * stream,
 			   InitialState * initialState);
-	void solveAll();
+	void solveAll(std::vector<Limiter*> & limiters,
+				  std::vector<Stream*>  & streams,
+					  std::vector<InitialState*>  & initialStates);
 protected:
 	SystemMaker  * m_systemMaker;
 	SystemSolver * m_systemSolver;
@@ -24,6 +26,7 @@ protected:
 
 	State m_origState;
 	State m_newState;
+	std::vector <double> m_valueVectorForFileWriter;
 
 	FileWriter m_numericalFileWriter;
 	FileWriter m_analyticalFileWriter;

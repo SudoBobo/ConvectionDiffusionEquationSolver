@@ -10,11 +10,11 @@
 
 #include "limiters/Limiter.h"
 #include "limiters/MUSCLLimiter.h"
-#include "limiters/LimiterN2.h"
-#include "limiters/LimiterN3.h"
-#include "limiters/MUSCLLimiterBM.h"
-#include "limiters/LimiterN2BM.h"
-#include "limiters/LimiterN3BM.h"
+//#include "limiters/LimiterN2.h"
+//#include "limiters/LimiterN3.h"
+//#include "limiters/MUSCLLimiterBM.h"
+//#include "limiters/LimiterN2BM.h"
+//#include "limiters/LimiterN3BM.h"
 
 
 #include "streams/Stream.h"
@@ -28,6 +28,14 @@
 
 int main ()
 {
+
+	// прикрутить человеческие начальные условия
+	// затычки заменить на расчёты нормальные
+	// мэйн подправить
+	// довести до кипения
+	// добавить гну плот
+	// докрутить хуюльки
+
 	const double a = 0.0;
 	const double b = 520.0;
 	const double spatialStep = 1;

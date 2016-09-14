@@ -1,4 +1,4 @@
-#include "GalerkinSystemMaker.h"
+#include "systemMakers/GalerkinSystemMaker.h"
 
 #include <cmath>
 
@@ -19,10 +19,6 @@ GalerkinSystemMaker::GalerkinSystemMaker(Problem *problem,
 
 }
 
-GalerkinSystemMaker::std::string name() const
-{
-	return m_name;
-}
 double GalerkinSystemMaker::dU(const int l, const Polynomial &  uPrev,
 										 const Polynomial & u,
 										 const Polynomial & uNext) const
@@ -46,4 +42,9 @@ double GalerkinSystemMaker::dU(const int l, const Polynomial &  uPrev,
 							std::pow(-1.0, l) *
 							m_stream->operator ()(uPrevValue, uValue))
 					 );
+}
+
+std::string GalerkinSystemMaker::getName() const
+{
+	return "Galerkin";
 }

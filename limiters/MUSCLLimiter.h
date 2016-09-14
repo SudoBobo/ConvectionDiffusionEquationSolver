@@ -10,6 +10,7 @@ public:
 	MUSCLLimiter(Conditions * conditions, const int k);
 	Polynomial limit(const Polynomial & uPrev, const Polynomial & u,
 						 const Polynomial & uNext) const;
+	std::string getName() const;
 };
 
 #endif // MUSCLLIMITER_H

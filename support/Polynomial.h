@@ -12,7 +12,7 @@ public:
 	Polynomial();
 	Polynomial & operator = (const Polynomial & anotherPolynomial);
 	double operator  () (int l) const;
-		  double & operator() (int l);
+	double & operator() (int l);
 	std::vector <double> getCoefficients() const;
 	int getOrder () const;
 	// номер точки на координатной оси

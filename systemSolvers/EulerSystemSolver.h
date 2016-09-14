@@ -1,7 +1,7 @@
 #ifndef EULERSYSTEMSOLVER_H
 #define EULERSYSTEMSOLVER_H
 
-#include "SystemSolver.h"
+#include "systemSolvers/SystemSolver.h"
 
 class EulerSystemSolver: public SystemSolver
 {
@@ -14,6 +14,8 @@ class EulerSystemSolver: public SystemSolver
 
 	private: Polynomial uNew(const Polynomial & uPrev, const Polynomial & u,
 							  const Polynomial & uNext) const;
+		std::string getName() const;
+
 };
 
 #endif // EULERSYSTEMSOLVER_H

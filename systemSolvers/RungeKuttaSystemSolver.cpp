@@ -19,3 +19,8 @@ void RungeKuttaSystemSolver::calcNextState(const State & currentState,
 {
 	nextState = currentState;
 }
+
+std::string RungeKuttaSystemSolver::getName() const
+{
+	return "RungeKutta";
+}

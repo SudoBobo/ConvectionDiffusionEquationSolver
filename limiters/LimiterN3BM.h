@@ -1,14 +1,16 @@
-#ifndef LIMITERN3BM_H
-#define LIMITERN3BM_H
+//#ifndef LIMITERN3BM_H
+//#define LIMITERN3BM_H
 
-#include "limiters/Limiter.h"
+//#include "limiters/Limiter.h"
 
-class LimiterN3BM
-{
-public:
-	LimiterN3BM(Conditions * conditions, const int k);
-	Polynomial limit(const Polynomial & uPrev, const Polynomial & u,
-						 const Polynomial & uNext) const;
-};
+//class LimiterN3BM
+//{
+//public:
+//	LimiterN3BM(Conditions * conditions, const int k);
+//	Polynomial limit(const Polynomial & uPrev, const Polynomial & u,
+//						 const Polynomial & uNext) const;
+//	std::string getName() const;
 
-#endif // LIMITERN3BM_H
+//};
+
+//#endif // LIMITERN3BM_H

@@ -13,3 +13,12 @@ SystemSolver::SystemSolver(Conditions *conditions)
 	m_conditions = conditions;
 }
 
+void SystemSolver::setLimiter(Limiter *newLimiter)
+{
+	m_limiter = newLimiter;
+}
+
+void SystemSolver::setSystemMaker(SystemMaker *newSystemMaker)
+{
+	m_systemMaker = newSystemMaker;
+}

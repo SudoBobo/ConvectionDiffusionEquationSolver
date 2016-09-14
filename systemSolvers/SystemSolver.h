@@ -14,6 +14,10 @@ public:
 				 SystemMaker * systemMaker);
 	SystemSolver(Conditions * conditions);
 	virtual void calcNextState(const State & currentState, State & nextState) const = 0;
+	virtual std::string getName() const = 0;
+	void setSystemMaker(SystemMaker * newSystemMaker);
+	void setLimiter (Limiter * newLimiter);
+
 //	virtual Polynomial uNew(const Polynomial & uPrev, const Polynomial & u,
 //						  const Polynomial & uNext) const = 0;
 protected:

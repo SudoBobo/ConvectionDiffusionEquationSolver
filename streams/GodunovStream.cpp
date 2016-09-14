@@ -1,6 +1,6 @@
 #include <algorithm>
 
-#include "GodunovStream.h"
+#include "streams/GodunovStream.h"
 
 GodunovStream::GodunovStream(Problem * problem): Stream(problem)
 {
@@ -16,4 +16,9 @@ double GodunovStream::operator ()(const double uA, const double uB) const
 				return std::min(m_problem->f(uA), m_problem->f(uB));
 		else
 				return std::max(m_problem->f(uA), m_problem->f(uB));
+}
+
+std::string GodunovStream::getName() const
+{
+	return "Godunov";
 }

@@ -1,7 +1,7 @@
 #ifndef GALERKINSYSTEMMAKER_H
 #define GALERKINSYSTEMMAKER_H
 
-#include "SystemMaker.h"
+#include "systemMakers/SystemMaker.h"
 
 class GalerkinSystemMaker: public SystemMaker
 {
@@ -12,9 +12,7 @@ public:
 	double dU(const int l, const Polynomial &  uPrev,
 						  const Polynomial & u,
 						  const Polynomial & uNext) const;
-	std::string m_name() const;
-private:
-	static std::string name = "Galerkin";
+	std::string getName() const;
 };
 
 #endif // GALERKINSYSTEMMAKER_H

@@ -1,4 +1,4 @@
-#include "Stream.h"
+#include "streams/Stream.h"
 
 Stream::Stream(Problem * problem)
 {

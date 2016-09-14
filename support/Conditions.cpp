@@ -1,4 +1,4 @@
-#include "Conditions.h"
+#include "support/Conditions.h"
 
 Conditions::Conditions(const double spatialStep, const double timeStep)
 {

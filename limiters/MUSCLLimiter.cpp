@@ -13,6 +13,10 @@ MUSCLLimiter::MUSCLLimiter(Conditions *conditions, const int k):
 	}
 }
 
+std::string MUSCLLimiter::getName() const
+{
+	return "MUSCL";
+}
 
 
 Polynomial MUSCLLimiter::limit(const Polynomial & uPrev, const Polynomial & u,
@@ -20,7 +24,8 @@ Polynomial MUSCLLimiter::limit(const Polynomial & uPrev, const Polynomial & u,
 {
 
 	static const double k = 1;
-	static const double h = m_conditions->getSpatialStep();
+	static double h;
+	h = m_conditions->getSpatialStep();
 
 	static double j;
 	static double xJ;
