@@ -42,7 +42,7 @@ int main ()
 	const double spatialStep = 1;
 	const int spatialSteps = static_cast <int>(std::floor((b - a) / spatialStep));
 
-	const double T = 100.0;
+	const double T = 10.0;
 	const double courantNumber = 0.1;
 	//?
 	const double velocityMagnitude = 1.0;
@@ -54,7 +54,7 @@ int main ()
 
 	const int k = 1;
 	std::vector <int> time = {0, 10};
-	std::string name = "Triangle12";
+	std::string name = "Triangle";
 	InitialState triangleInitialState(spatialSteps, 1, k+1, &conditions,
 							  time, name, 0.0, 20.0,
 							   u0Triangle);

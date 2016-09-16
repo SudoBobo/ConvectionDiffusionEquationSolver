@@ -65,7 +65,7 @@ void FileWriter::write(const int stepNumber) const
 			pName += std::to_string(stepNumber);
 			pName += ".pvtr";
 
-			std::ofstream foutP(m_path + m_directory + pName);
+			std::ofstream foutP(m_path + m_directory +  "/" + pName);
 			foutP  << "<?xml version=\"1.0\"?>\n" <<
 			"<VTKFile type=\"PRectilinearGrid\" version=\"0.1\" byte_order=\"LittleEndian\">\n" <<
 			"<PRectilinearGrid WholeExtent=\"0 " << m_gridSize[0]  <<" 0 " << m_gridSize[1]  <<  " 0 " << m_gridSize[2] << "\" GhostLevel=\"0\">\n" <<
@@ -83,7 +83,7 @@ void FileWriter::write(const int stepNumber) const
 			"</VTKFile>";
 			foutP.close();
 
-			std::ofstream foutN(m_path + m_directory + fName);
+			std::ofstream foutN(m_path + m_directory + "/" + fName);
 			foutN.precision(m_precision);
 			foutN  << "<?xml version=\"1.0\"?>\n" <<
 			"<VTKFile type=\"RectilinearGrid\" version=\"0.1\" byte_order=\"LittleEndian\">\n" <<

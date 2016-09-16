@@ -22,8 +22,6 @@ double calcAvgValue(const double spatialStep,
 	xJnext = xJ + 0.5 * h;
 	xJprev = xJ - 0.5 * h;
 
-	std::cout << "xJ = " << xJ << " xJnext = " << xJnext <<
-				 " xJprev = " << xJprev << std::endl;
 	static int k;
 
 	k = u.getOrder();
@@ -31,7 +29,6 @@ double calcAvgValue(const double spatialStep,
 	{
 	case 0:
 		return u(0);
-		std::cout << "fuck you!" << std::endl;
 	case 1:
 		// works just fine, don't touch please
 		return u(0) + (u(1) / (h * h)) *

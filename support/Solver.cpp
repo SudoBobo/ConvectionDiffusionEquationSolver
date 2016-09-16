@@ -11,7 +11,7 @@ Solver::Solver(SystemMaker * systemMaker, SystemSolver * systemSolver,
 	m_systemSolver->setSystemMaker(m_systemMaker);
 	m_numericalFileWriter.setPrecision(6);
 
-	std::vector <int> newGridSize = {(m_systemMaker->getK() *
+	std::vector <int> newGridSize = {((m_systemMaker->getK() + 1) *
 					  int(m_conditions->getSpatialSteps())), 0, 0};
 
 	m_numericalFileWriter.setGridSize(newGridSize);
@@ -43,7 +43,6 @@ dataGeneralDirectoryName = m_systemMaker->getName() + m_systemSolver->getName() 
 
 static std::string command;
 command = "mkdir " + m_numericalFileWriter.getPath() + dataGeneralDirectoryName;
-std::cout << command << std::endl;
 std::system(command.c_str());
 
 m_numericalFileWriter.setDirectory(dataGeneralDirectoryName);
@@ -51,10 +50,8 @@ m_numericalFileWriter.setDirectory(dataGeneralDirectoryName);
 static int timeSteps;
 timeSteps = m_conditions->getTimeSteps();
 
-//? try it
 m_origState = initialState->getState();
 m_newState  = initialState->getState();
-// ??
 
 if (m_systemMaker == nullptr)
 {
@@ -86,7 +83,7 @@ if (m_systemSolver->getSystemMaker()== nullptr)
 for (int t = 0; t <= timeSteps; t++)
 	{
 		//!!
-		m_valueVectorForFileWriter = m_origState.makeValueVector(42);
+		m_valueVectorForFileWriter = m_origState.makeValueVector();
 		m_numericalFileWriter.write(t);
 
 		if (std::count(initialState->getTimeMoments().begin(),
@@ -98,6 +95,7 @@ for (int t = 0; t <= timeSteps; t++)
 			//Draw the picture using system and stuff
 		}
 		m_systemSolver->calcNextState(m_origState, m_newState);
+		m_origState = m_newState;
 	}
 }
 

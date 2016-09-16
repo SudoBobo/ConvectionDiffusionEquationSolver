@@ -229,7 +229,7 @@ State State::operator *(double coefficient) const
 		return temp;
 }
 
-std::vector <double> State::makeValueVector(const int j) const
+std::vector <double> State::makeValueVector() const
 {
 	assert((this->kSize() == 1) || (this->kSize() == 2));
 
@@ -240,7 +240,7 @@ std::vector <double> State::makeValueVector(const int j) const
 	{
 		for (int i = 0; i < value.size(); i++)
 		{
-			value[i] = 42; /*calcAvgValue(1, j, m_conditions->getSpatialStep(),
+			value[i] = m_state[i][0][0]; /*calcAvgValue(1, j, m_conditions->getSpatialStep(),
 									this->operator ()(i, j));*/
 		}
 		return value;
@@ -248,17 +248,25 @@ std::vector <double> State::makeValueVector(const int j) const
 
 	if (this->kSize() == 2)
 	{
-		for (int i = 0; i < value.size(); i++)
-		{	// x(j-1/2)
-			if ((i % 2) == 0)
-			{
-				value[i] = 42;
-			}
-			// x(j+1/2)
-			else
-			{
-				value [i] = 42;
-			}
+		static double x;
+
+		for (int i = 0; i < m_iSize; i++)
+		{
+			// with another division the calculations may be more accurate
+			x = i * m_conditions->getSpatialStep() / 2.0;
+			value[ i * 2] = m_state[i][0][0] + m_state[i][0][1] * x;
+			x += m_conditions->getSpatialStep() / 2.0;
+			value[(i * 2) + 1]  = m_state[i][0][0] + m_state[i][0][1] * x;
+			// x(j-1/2)
+//			if ((i % 2) == 0)
+//			{
+//				value[i] = m_state[i][0][0] + m_state[i][0][1] * x;
+//			}
+//			// x(j+1/2)
+//			else
+//			{
+//				value [i] = 42;
+//			}
 		}
 		return value;
 	}

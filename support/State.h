@@ -27,7 +27,7 @@ public:
 	double & operator()  (int i, int j, int k);
 	void operator ()(int i, int j, Polynomial &newPolynomial);
 
-	std::vector <double> makeValueVector(const int j) const;
+	std::vector <double> makeValueVector() const;
 	int valueVectorSize() const;
 
 	int iSize() const;
