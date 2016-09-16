@@ -14,12 +14,18 @@ SystemMaker::SystemMaker(Problem * problem, Conditions * conditions, const int k
 {
 	m_problem = problem;
 	m_conditions = conditions;
+	m_stream = nullptr;
 	m_k = k;
 }
 
 void SystemMaker::setStream(Stream * newStream)
 {
 	m_stream = newStream;
+}
+
+Stream * SystemMaker::getStream()
+{
+	return m_stream;
 }
 
 int SystemMaker::getK() const

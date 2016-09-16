@@ -9,6 +9,8 @@ double calcAvgValue(const double spatialStep,
 				 const Polynomial & u);
 double integral23(const int l, const double spatialStep,
 				  const Polynomial &u);
+double u0Triangle(double x, int l, double h, double lN1, double lN2);
+
 
 // m - function from limiter definition from article
 //http://keldysh.ru/papers/2005/prep105/prep2005_105.html

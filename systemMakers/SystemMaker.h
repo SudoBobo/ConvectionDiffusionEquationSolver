@@ -21,6 +21,7 @@ public:
 	virtual std::string getName() const = 0;
 
 	void setStream(Stream * newStream);
+	Stream * getStream ();
 	int getK() const;
 
 protected:

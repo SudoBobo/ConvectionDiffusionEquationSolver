@@ -29,10 +29,8 @@ void EulerSystemSolver::calcNextState(const State & currentState,
 
 	static int iMax;
 	iMax =  currentState.iSize() - 1;
-	{
 		// j = 0
 		u = currentState(0,0);
-		u = currentState(0, 0);
 		uPrev = currentState(iMax, 0);
 		uNext = currentState(1, 0);
 
@@ -57,7 +55,6 @@ void EulerSystemSolver::calcNextState(const State & currentState,
 			tempPoly = uNew (uPrev, u, uNext);
 			nextState(i, 0, tempPoly);
 		}
-	}
 
 }
 

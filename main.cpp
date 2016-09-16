@@ -3,8 +3,9 @@
 
 #include "support/Conditions.h"
 #include "support/State.h"
+#include "support/InitialState.h"
 #include "support/Problem.h"
-
+#include "support/Solver.h"
 #include "systemMakers/SystemMaker.h"
 #include "systemMakers/GalerkinSystemMaker.h"
 
@@ -29,7 +30,7 @@
 int main ()
 {
 
-	// прикрутить человеческие начальные условия
+	// прикрутить человеческие начальные условия +
 	// затычки заменить на расчёты нормальные
 	// мэйн подправить
 	// довести до кипения
@@ -52,19 +53,30 @@ int main ()
 	Problem problem;
 
 	const int k = 1;
+	std::vector <int> time = {0, 10};
+	std::string name = "Triangle12";
+	InitialState triangleInitialState(spatialSteps, 1, k+1, &conditions,
+							  time, name, 0.0, 20.0,
+							   u0Triangle);
+	std::vector <InitialState*> initialStates;
+	initialStates.push_back(&triangleInitialState);
 
 	//Streams
-//	GodunovStream godunovStream(& problem);
+	GodunovStream godunovStream(& problem);
+	std::vector <Stream*> streams;
+	streams.push_back(&godunovStream);
 ////	EOStream EOstream(& problem);
 ////	LFStream LFstream(& problem);
 ////	LLFstream LLFstream (&problem);
 ////	RStream Rstream (& problem);
 
-//	GalerkinSystemMaker galerkinSystemMaker(&problem, &conditions,
-//											&godunovStream, k);
+GalerkinSystemMaker galerkinSystemMaker(&problem, &conditions, k);
 
 //	//TVDM limiters
-////	MUSCLLimiter MUSCLLimiter(&conditions);
+	MUSCLLimiter MUSCLlimiter(&conditions, k);
+	std::vector <Limiter*> limiters;
+	limiters.push_back(&MUSCLlimiter);
+
 ////	LimiterN2 limiterN2 (& conditions);
 ////	LimiterN3 limiterN3 (& conditions);
 
@@ -74,32 +86,20 @@ int main ()
 ////	LimiterN2BM limitrN2BM  (&conditions);
 ////	LimiterN3BM limiterN3BM (&conditions);
 
-//	RungeKuttaSystemSolver rungeKuttaSystemSolver(&MUSCLLimiter, &conditions,
+//	RungeKuttaSystemSolver rungeKuttaSystemSolver(&MUSCLlimiter, &conditions,
 //												  &galerkinSystemMaker);
-	//Initial States
-	//Cheeke
-	//Breeke
+	EulerSystemSolver eulerSystemSolver(&conditions);
 
-//	Solver solver (&rungeKuttaSystemSolver, &conditions, a, b, T);
+	///inside the solver:
+	/// writer.setNumericalSolutionSource(...);
+	/// etc for error and analytical
+	///
 
-//	///inside the solver:
-//	/// writer.setNumericalSolutionSource(...);
-//	/// etc for error and analytical
-//	///
-
-//	/*
-//	 * Solver solver(& galerkinSystemMaker, & eulerSystemMaker, & conditions);
-//	 * solver.solveAll(limiters, streams, initialStates);
-//	 * return 0;
-
-//	for (int t = 0; t < timeSteps; t++)
-//	{
-//		solver.makeGNUplots;
-//		solver.write();
-//		// writes numerical solution, analytic solution and error
-//		solver.solve();
-//	}
-	// вектор указателей на лимитеры-хуитеры, стримы-хуимы, туда сюда толкаешь
+	 Solver solver(& galerkinSystemMaker, & eulerSystemSolver, & conditions);
+	 solver.solveAll(limiters, streams, initialStates);
+	 return 0;
+}
+//указателей на лимитеры-хуитеры, стримы-хуимы, туда сюда толкаешь
 	// как насвай по дёснам
 
 	//!! ТЕСТЫ ОСТАВТЬ ОКАЯННЫЙ !!
@@ -163,6 +163,3 @@ int main ()
 //	Polynomial ass(dick, 20, 1);
 //	std::cout << calcAvgValue(1.0, ass) << std::endl;
 //	std::cout << 205 << std::endl;
-
-	return 0;
-}

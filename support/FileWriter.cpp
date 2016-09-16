@@ -13,7 +13,7 @@
 
 FileWriter::FileWriter()
 {
-
+	m_source = nullptr;
 }
 
 FileWriter::FileWriter(std::vector <double> * source,

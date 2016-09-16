@@ -11,6 +11,8 @@ SystemSolver::SystemSolver(Limiter *limiter, Conditions *conditions,
 SystemSolver::SystemSolver(Conditions *conditions)
 {
 	m_conditions = conditions;
+	m_limiter = nullptr;
+	m_systemMaker = nullptr;
 }
 
 void SystemSolver::setLimiter(Limiter *newLimiter)
@@ -18,7 +20,17 @@ void SystemSolver::setLimiter(Limiter *newLimiter)
 	m_limiter = newLimiter;
 }
 
+Limiter * SystemSolver::getLimiter()
+{
+	return m_limiter;
+}
+
 void SystemSolver::setSystemMaker(SystemMaker *newSystemMaker)
 {
 	m_systemMaker = newSystemMaker;
+}
+
+SystemMaker * SystemSolver::getSystemMaker()
+{
+	return m_systemMaker;
 }

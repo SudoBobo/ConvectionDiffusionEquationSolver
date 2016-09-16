@@ -16,7 +16,9 @@ public:
 	virtual void calcNextState(const State & currentState, State & nextState) const = 0;
 	virtual std::string getName() const = 0;
 	void setSystemMaker(SystemMaker * newSystemMaker);
+	SystemMaker * getSystemMaker ();
 	void setLimiter (Limiter * newLimiter);
+	Limiter * getLimiter ();
 
 //	virtual Polynomial uNew(const Polynomial & uPrev, const Polynomial & u,
 //						  const Polynomial & uNext) const = 0;

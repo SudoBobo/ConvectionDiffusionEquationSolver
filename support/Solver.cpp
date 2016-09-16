@@ -1,6 +1,7 @@
 #include "support/Solver.h"
 #include <string>
 #include <algorithm>
+#include <iostream>
 
 Solver::Solver(SystemMaker * systemMaker, SystemSolver * systemSolver,
 			   Conditions * conditions)
@@ -16,7 +17,7 @@ Solver::Solver(SystemMaker * systemMaker, SystemSolver * systemSolver,
 	m_numericalFileWriter.setGridSize(newGridSize);
 	m_numericalFileWriter.setGeneralFileName("part0_");
 	m_numericalFileWriter.setGeneralHeaderName("file");
-	m_numericalFileWriter.setPath("home/bobo/newData/");
+	m_numericalFileWriter.setPath("/home/bobo/newData/");
 
 	m_numericalFileWriter.setSource(&m_valueVectorForFileWriter);
 
@@ -29,18 +30,20 @@ void Solver::solve(Limiter * limiter, Stream * stream,
 				   InitialState * initialState)
 {
 m_systemMaker->setStream(stream);
+m_systemSolver->setSystemMaker(m_systemMaker);
 m_systemSolver->setLimiter(limiter);
 
 static std::string dataGeneralDirectoryName;
 //static std::string GNUplotName;
 
 dataGeneralDirectoryName.clear();
-dataGeneralDirectoryName = m_systemMaker->getName() + " " + m_systemSolver->getName() + " " +
-			   limiter->getName() + " " + stream->getName() + " " +
+dataGeneralDirectoryName = m_systemMaker->getName() + m_systemSolver->getName() +
+			   limiter->getName() + stream->getName() +
 			   initialState->getName();
 
 static std::string command;
-command = "mkdir" + m_numericalFileWriter.getPath() + dataGeneralDirectoryName;
+command = "mkdir " + m_numericalFileWriter.getPath() + dataGeneralDirectoryName;
+std::cout << command << std::endl;
 std::system(command.c_str());
 
 m_numericalFileWriter.setDirectory(dataGeneralDirectoryName);
@@ -50,7 +53,36 @@ timeSteps = m_conditions->getTimeSteps();
 
 //? try it
 m_origState = initialState->getState();
+m_newState  = initialState->getState();
 // ??
+
+if (m_systemMaker == nullptr)
+{
+	throw std::range_error("m_systemMaker == nullptr!");
+}
+
+if (m_systemSolver == nullptr)
+{
+	throw std::range_error("m_systemSolver == nullptr!");
+}
+
+if (m_systemMaker->getStream() == nullptr)
+{
+	throw std::range_error("m_stream == nullptr!");
+}
+
+if (m_systemSolver->getLimiter() == nullptr)
+{
+	throw std::range_error("m_limiter == nullptr!");
+}
+
+if (m_systemSolver->getSystemMaker()== nullptr)
+{
+	throw std::range_error("m_systemMaker == nullptr!");
+}
+
+
+
 for (int t = 0; t <= timeSteps; t++)
 	{
 		//!!

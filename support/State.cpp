@@ -27,7 +27,8 @@ State::State(int iSize, int jSize, int kSize, Conditions * conditions)
 
 State::State()
 {
-
+	m_state = nullptr;
+	m_conditions = nullptr;
 }
 
 State::State(const State & anotherState)
@@ -67,8 +68,7 @@ State::~State()
 
 double State::operator()(int i, int j, int k) const
 {
-		if((i > m_iSize) || (j > m_jSize) || (k > m_kSize) ||(i < 0)||(j<0)
-																																		||(k <0))
+		if((i > m_iSize) || (j > m_jSize) || (k > m_kSize) ||(i < 0)||(j<0)||(k <0))
 				throw std::range_error("Try to get an access to point that doesn't exist");
 
 		return m_state[i][j][k];
@@ -102,8 +102,7 @@ void State::operator ()(int i, int j, Polynomial & newPolynomial)
 
 double & State::operator()(int i, int j, int k)
 {
-		if((i > m_iSize) || (j > m_jSize) || (k > m_kSize) || (i <0)||(j <0)
-																																		 || (k<0))
+		if((i > m_iSize) || (j > m_jSize) || (k > m_kSize) || (i <0)||(j <0) || (k<0))
 				throw std::range_error("Try to get an access to point that doesn't exist");
 
 		return m_state[i][j][k];
@@ -115,14 +114,16 @@ State & State:: operator =(const State & anotherState)
 		{
 			return *this;
 		}
-
-		for (int i = 0; i < m_iSize; i++){
-				for (int j = 0; j < m_jSize; j++){
-						delete [] m_state[i][j];
-				}
-				delete [] m_state[i];
+		if (m_state != nullptr)
+		{
+			for (int i = 0; i < m_iSize; i++){
+					for (int j = 0; j < m_jSize; j++){
+							delete [] m_state[i][j];
+					}
+					delete [] m_state[i];
+			}
+			delete [] m_state;
 		}
-		delete [] m_state;
 
 		this->m_iSize = anotherState.iSize();
 		this->m_jSize = anotherState.jSize();
