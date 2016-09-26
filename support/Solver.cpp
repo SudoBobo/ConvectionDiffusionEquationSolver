@@ -95,6 +95,7 @@ for (int t = 0; t <= timeSteps; t++)
 			//Draw the picture using system and stuff
 		}
 		m_systemSolver->calcNextState(m_origState, m_newState);
+//		m_newState = m_origState * 0.99;
 		m_origState = m_newState;
 	}
 }

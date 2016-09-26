@@ -2,6 +2,8 @@
 #define SYSTEMMAKER_H
 
 #include <string>
+#include <assert.h>
+#include <cmath>
 
 #include "support/Conditions.h"
 #include "support/Problem.h"

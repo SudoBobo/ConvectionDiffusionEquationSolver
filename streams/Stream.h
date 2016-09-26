@@ -3,6 +3,8 @@
 
 #include "support/Problem.h"
 #include <string>
+#include <cmath>
+#include <assert.h>
 
 class Stream
 {

@@ -1,6 +1,9 @@
 #ifndef SYSTEMSOLVER_H
 #define SYSTEMSOLVER_H
 
+#include <assert.h>
+#include <cmath>
+
 #include "limiters/Limiter.h"
 #include "support/Conditions.h"
 #include "systemMakers/SystemMaker.h"

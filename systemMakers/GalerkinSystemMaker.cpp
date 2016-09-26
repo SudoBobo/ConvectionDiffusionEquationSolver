@@ -33,8 +33,29 @@ double GalerkinSystemMaker::dU(const int l, const Polynomial &  uPrev,
 	uPrevValue =  calcAvgValue(spatialStep, uPrev);
 	uNextValue =  calcAvgValue(spatialStep, uNext);
 
+
+	assert(!std::isnan(uValue));
+	assert(!std::isinf(uValue));
+	assert(std::isfinite(uValue));
+
+	assert(!std::isnan(uPrevValue));
+	assert(!std::isinf(uPrevValue));
+	assert(std::isfinite(uPrevValue));
+
+	assert(!std::isnan(uNextValue));
+	assert(!std::isinf(uNextValue));
+	assert(std::isfinite(uNextValue));
+
 	static double integral;
 	integral = integral23(l, spatialStep, u);
+
+	assert(!std::isnan   (integral));
+	assert(!std::isinf   (integral));
+	assert( std::isfinite(integral));
+
+	assert(!std::isnan   (std::pow(-1.0, l)));
+	assert(!std::isinf   (std::pow(-1.0, l)));
+	assert( std::isfinite(std::pow(-1.0, l)));
 
 	return ((2.0 * l + 1.0) / m_conditions->getSpatialStep()) *
 					 (

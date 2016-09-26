@@ -34,6 +34,30 @@ void EulerSystemSolver::calcNextState(const State & currentState,
 		uPrev = currentState(iMax, 0);
 		uNext = currentState(1, 0);
 
+		assert(!std::isnan   (uPrev(0)));
+		assert(!std::isinf   (uPrev(0)));
+		assert( std::isfinite(uPrev(0)));
+
+		assert(!std::isnan   (u(0)));
+		assert(!std::isinf   (u(0)));
+		assert( std::isfinite(u(0)));
+
+		assert(!std::isnan   (uNext(0)));
+		assert(!std::isinf   (uNext(0)));
+		assert( std::isfinite(uNext(0)));
+
+		assert(!std::isnan   (uPrev(1)));
+		assert(!std::isinf   (uPrev(1)));
+		assert( std::isfinite(uPrev(1)));
+
+		assert(!std::isnan   (u(1)));
+		assert(!std::isinf   (u(1)));
+		assert( std::isfinite(u(1)));
+
+		assert(!std::isnan   (uNext(1)));
+		assert(!std::isinf   (uNext(1)));
+		assert( std::isfinite(uNext(1)));
+
 		tempPoly = uNew (uPrev, u, uNext);
 		nextState(0, 0, tempPoly);
 
@@ -41,6 +65,30 @@ void EulerSystemSolver::calcNextState(const State & currentState,
 		u = currentState(iMax, 0);
 		uPrev = currentState(iMax - 1, 0);
 		uNext = currentState(0, 0);
+
+		assert(!std::isnan   (uPrev(0)));
+		assert(!std::isinf   (uPrev(0)));
+		assert( std::isfinite(uPrev(0)));
+
+		assert(!std::isnan   (u(0)));
+		assert(!std::isinf   (u(0)));
+		assert( std::isfinite(u(0)));
+
+		assert(!std::isnan   (uNext(0)));
+		assert(!std::isinf   (uNext(0)));
+		assert( std::isfinite(uNext(0)));
+
+		assert(!std::isnan   (uPrev(1)));
+		assert(!std::isinf   (uPrev(1)));
+		assert( std::isfinite(uPrev(1)));
+
+		assert(!std::isnan   (u(1)));
+		assert(!std::isinf   (u(1)));
+		assert( std::isfinite(u(1)));
+
+		assert(!std::isnan   (uNext(1)));
+		assert(!std::isinf   (uNext(1)));
+		assert( std::isfinite(uNext(1)));
 
 		tempPoly = uNew (uPrev, u, uNext);
 		nextState(iMax, 0, tempPoly);
@@ -51,6 +99,30 @@ void EulerSystemSolver::calcNextState(const State & currentState,
 			u = currentState(i, 0);
 			uPrev = currentState(i - 1, 0);
 			uNext = currentState(i + 1, 0);
+
+			assert(!std::isnan   (uPrev(0)));
+			assert(!std::isinf   (uPrev(0)));
+			assert( std::isfinite(uPrev(0)));
+
+			assert(!std::isnan   (u(0)));
+			assert(!std::isinf   (u(0)));
+			assert( std::isfinite(u(0)));
+
+			assert(!std::isnan   (uNext(0)));
+			assert(!std::isinf   (uNext(0)));
+			assert( std::isfinite(uNext(0)));
+
+			assert(!std::isnan   (uPrev(1)));
+			assert(!std::isinf   (uPrev(1)));
+			assert( std::isfinite(uPrev(1)));
+
+			assert(!std::isnan   (u(1)));
+			assert(!std::isinf   (u(1)));
+			assert( std::isfinite(u(1)));
+
+			assert(!std::isnan   (uNext(1)));
+			assert(!std::isinf   (uNext(1)));
+			assert( std::isfinite(uNext(1)));
 
 			tempPoly = uNew (uPrev, u, uNext);
 			nextState(i, 0, tempPoly);

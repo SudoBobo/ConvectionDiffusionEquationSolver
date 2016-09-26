@@ -1,4 +1,5 @@
 #include "support/InitialState.h"
+double triangle(double x, int l, double h, double lN1, double lN2);
 
 InitialState::InitialState(int iSize, int jSize, int kSize, Conditions * conditions)
 	:State(iSize, jSize, kSize, conditions)
@@ -25,8 +26,11 @@ InitialState::InitialState(int iSize, int jSize, int kSize, Conditions * conditi
 						  static double h;
 						  h = this->getConditions()->getSpatialStep();
 
+//						  this->operator ()(i, j, k) =
+//						  initialStateMaker(x, l, h, lN1, lN2);
+
 						  this->operator ()(i, j, k) =
-						  initialStateMaker(x, l, h, lN1, lN2);
+						  triangle(x, l, h, lN1, lN2);
 					  }
 			  }
 	}
@@ -56,3 +60,223 @@ State InitialState::getState() const
 	}
 	return temp;
 }
+
+double triangle(double x, int l, double h, double lN1, double lN2)
+{
+	if (lN1 == 0.0)
+	{
+
+	}
+	else
+	{
+		assert(!std::isnan   (lN1));
+		assert(!std::isinf   (lN1));
+		assert( std::isfinite(lN1));
+	}
+
+	assert(!std::isnan   (lN2));
+	assert(!std::isinf   (lN2));
+	assert( std::isfinite(lN2));
+
+	if (x == 0)
+	{
+
+	}
+	else
+	{
+		assert(!std::isnan   (x));
+		assert(!std::isinf   (x));
+		assert( std::isfinite(x));
+	}
+
+
+	if (l == 0)
+	{
+
+	}
+	else
+	{
+		assert(!std::isnan   (l));
+		assert(!std::isinf   (l));
+		assert( std::isfinite(l));
+		assert((0 <= l) && (l <= 20));
+	}
+
+	assert(!std::isnan   (h));
+	assert(!std::isinf   (h));
+	assert( std::isfinite(h));
+
+		static double intervalN1;
+		static double intervalN2;
+
+		intervalN1 = 0.0;
+		intervalN2 = 0.0;
+
+		static double middle = 0.5 * (lN2 +lN1);
+
+		static double xPrev;
+		static double xNext;
+
+		xPrev = x - h;
+		xNext = x + h;
+		assert((l == 0) || (l == 1));
+		switch (l)
+		{
+		case 0:
+
+				if ((lN1 <= xPrev) && (xNext <= middle))
+				{
+//						intervalN1 = ((2.0) / (h * (lN2 - lN1))) *
+//												 (
+//												 xNext * (xNext / 2.0 - lN1) -
+//												 xPrev * (xPrev / 2.0 - lN1)
+//												 );
+
+						intervalN1 =			 (
+												 xNext * (xNext - 2.0 * lN1) -
+												 xPrev * (xPrev - 2.0 *  lN1)
+												 ) / (h * (lN2 - lN1));
+						intervalN2 = 0.0;
+				return intervalN1;
+				break;
+				}
+
+
+				if ((xPrev <= middle ) && (middle < xNext))
+				{
+						intervalN1 =			 (
+												 middle * (middle - 2.0 * lN1) -
+												 xPrev * (xPrev - 2.0 *  lN1)
+												 ) / (h * (lN2 - lN1));
+
+						intervalN2 = 			 (
+												 xNext * (2.0 * lN2 - xNext) -
+												 middle * (2.0 * lN2 - middle)
+												 )  / (h * (lN2 - lN1));
+						return intervalN1 + intervalN2;
+						break;
+				}
+
+				if ((middle < xPrev) && (xNext <= lN2))
+				{
+						intervalN1 = 0.0;
+
+						intervalN2 = 			 (
+												 xNext * (2.0 * lN2 - xNext) -
+												 xPrev * (2.0 * lN2 - xPrev)
+												 )  / (h * (lN2 - lN1));
+						return intervalN2;
+
+						break;
+				}
+
+				if ((xPrev <= lN2) && (lN2 < xNext))
+				{
+						intervalN1 = 0.0;
+						intervalN2 = 			 (
+												 lN2 * (2.0 * lN2 - lN2) -
+												 xPrev * (2.0 * lN2 - xPrev)
+												 )  / (h * (lN2 - lN1));
+						return intervalN2;
+
+						break;
+				}
+
+				if (lN2 < xPrev)
+				{
+						intervalN1 = 0.0;
+						intervalN2 = 0.0;
+						return 0.0;
+						break;
+				}
+
+		case 1:
+				if ((lN1 <= xPrev) && (xNext <= middle))
+				{
+						intervalN1 = (
+						4.0 * (xNext * xNext * xNext - xPrev * xPrev * xPrev) -
+						6.0 * x * (xNext * xNext - xPrev * xPrev) -
+						6.0 * lN1 * (xNext * xNext - xPrev * xPrev) +
+						12.0 * x * lN1 * (xNext - xPrev)
+									 ) / (h * h * (lN2 - lN1));
+						intervalN2 = 0.0;
+						return intervalN1;
+				break;
+				}
+
+				if ((xPrev <= middle) && (middle < xNext))
+				{
+					intervalN1 = (
+					4.0 * (middle * middle * middle - xPrev * xPrev * xPrev) -
+					6.0 * x * (middle * middle - xPrev * xPrev) -
+					6.0 * lN1 * (middle * middle - xPrev * xPrev) +
+					12.0 * x * lN1 * (middle - xPrev)
+								 ) / (h * h * (lN2 - lN1));
+
+					intervalN2 = (
+					 -4.0 * (xNext * xNext * xNext - middle * middle * middle) +
+					 6.0 * x * (xNext * xNext - middle * middle) +
+					 6.0 * lN2 * (xNext * xNext - middle * middle) -
+					 12.0 * x * lN2 * (xNext - middle)
+								  ) / (h * h * (lN2 - lN1));
+
+					return intervalN1 + intervalN2;
+						break;
+				}
+
+				if ((middle <= xPrev) && (xNext <= lN2))
+				{
+						intervalN1 = 0.0;
+						intervalN2 = (
+						 -4.0 * (xNext * xNext * xNext - xPrev * xPrev * xPrev) +
+						 6.0 * x * (xNext * xNext - xPrev * xPrev) +
+						 6.0 * lN2 * (xNext * xNext - xPrev * xPrev) -
+						 12.0 * x * lN2 * (xNext - xPrev)
+									  ) / (h * h * (lN2 - lN1));
+						return intervalN2;
+						break;
+				}
+
+				if ((xPrev <= lN2) && (lN2 < xNext))
+				{
+						intervalN1 = 0.0;
+						intervalN2 = (
+						 -4.0 * (lN2 * lN2 * lN2 - xPrev * xPrev * xPrev) +
+						 6.0 * x * (lN2 * lN2 - xPrev * xPrev) +
+						 6.0 * lN2 * (lN2 * lN2 - xPrev * xPrev) -
+						 12.0 * x * lN2 * (lN2 - xPrev)
+									  ) / (h * h * (lN2 - lN1));
+						return intervalN2;
+						break;
+				}
+
+				if (lN2 < xPrev)
+				{
+						intervalN1 = 0.0;
+						intervalN2 = 0.0;
+						return 0.0;
+						break;
+				}
+		}
+
+		if (intervalN1 != 0)
+		{
+			assert(!std::isnan   (intervalN1));
+			assert(!std::isinf   (intervalN1));
+			assert( std::isfinite(intervalN1));
+		}
+
+		if (intervalN2 != 0)
+		{
+			assert(!std::isnan   (intervalN2));
+			assert(!std::isinf   (intervalN2));
+			assert( std::isfinite(intervalN2));
+		}
+		if (intervalN2 == 0)
+				return intervalN1;
+		if (intervalN1 == 0)
+				return intervalN2;
+		else
+			return intervalN1 + intervalN2;
+}
+

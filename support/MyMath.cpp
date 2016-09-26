@@ -6,6 +6,15 @@
 double calcAvgValue(const double spatialStep,
 				 const Polynomial &u)
 {
+
+	assert(!std::isnan   (u(0)));
+	assert(!std::isinf   (u(0)));
+	assert( std::isfinite(u(0)));
+
+	assert(!std::isnan   (u(1)));
+	assert(!std::isinf   (u(1)));
+	assert( std::isfinite(u(1)));
+
 	//вычисление среднего значения по промежутку от j- 1/2 до j + 1/2
 	// x(j), x(j+1/2), x(j-1/2)
 	static double xJ;
@@ -43,6 +52,14 @@ double calcAvgValue(const double spatialStep,
 double integral23(const int l, const double spatialStep,
 				  const Polynomial & u)
 {
+	assert(!std::isnan   (u(0)));
+	assert(!std::isinf   (u(0)));
+	assert( std::isfinite(u(0)));
+
+	assert(!std::isnan   (u(1)));
+	assert(!std::isinf   (u(1)));
+	assert( std::isfinite(u(1)));
+
 	static double xJ;
 	static double xJnext;
 	static double xJprev;
@@ -91,6 +108,15 @@ double integral23(const int l, const double spatialStep,
 
 double m (double a, double b)
 {
+
+	assert(!std::isnan   (a));
+	assert(!std::isinf   (a));
+	assert( std::isfinite(a));
+
+	assert(!std::isnan   (b));
+	assert(!std::isinf   (b));
+	assert( std::isfinite(b));
+
 	if (sgn(a) == sgn(b))
 	{
 		return sgn(a) * (std::min(std::abs(a), std::abs(b)));
@@ -103,6 +129,19 @@ double m (double a, double b)
 
 double m(double a, double b, double c)
 {
+	assert(!std::isnan   (a));
+	assert(!std::isinf   (a));
+	assert( std::isfinite(a));
+
+	assert(!std::isnan   (b));
+	assert(!std::isinf   (b));
+	assert( std::isfinite(b));
+
+	assert(!std::isnan   (c));
+	assert(!std::isinf   (c));
+	assert( std::isfinite(c));
+
+
 	if ((sgn(a) == sgn(b)) && (sgn(b) == sgn(c)))
 	{
 		return sgn(a) * std::min(std::min(std::abs(a), std::abs(b)),
@@ -116,6 +155,24 @@ double m(double a, double b, double c)
 
 double m(double a, double b, double c, double d)
 {
+
+	assert(!std::isnan   (a));
+	assert(!std::isinf   (a));
+	assert( std::isfinite(a));
+
+	assert(!std::isnan   (b));
+	assert(!std::isinf   (b));
+	assert( std::isfinite(b));
+
+	assert(!std::isnan   (c));
+	assert(!std::isinf   (c));
+	assert( std::isfinite(c));
+
+	assert(!std::isnan   (d));
+	assert(!std::isinf   (d));
+	assert( std::isfinite(d));
+
+
 	if ((sgn(a) == sgn(b)) && (sgn(b) == sgn(c)) && (sgn(c) == sgn(d)))
 	{
 		return sgn(a) * std::min(std::min(std::abs(a), std::abs(b)),
@@ -132,6 +189,20 @@ double m(double a, double b, double c, double d)
 //??
 double mForBMLimiters(double a, double b, double c)
 {
+
+	assert(!std::isnan   (a));
+	assert(!std::isinf   (a));
+	assert( std::isfinite(a));
+
+	assert(!std::isnan   (b));
+	assert(!std::isinf   (b));
+	assert( std::isfinite(b));
+
+	assert(!std::isnan   (c));
+	assert(!std::isinf   (c));
+	assert( std::isfinite(c));
+
+
 	if ((sgn(a) == sgn(b)) && (sgn(b) == sgn(c)))
 	{
 		return sgn(a) * std::min(std::min(std::abs(a), std::abs(b)),
@@ -145,12 +216,31 @@ double mForBMLimiters(double a, double b, double c)
 
 int sgn (double val)
 {
+	assert(!std::isnan   (val));
+	assert(!std::isinf   (val));
+	assert( std::isfinite(val));
+
 	return ((0.0 < val) - (val < 0.0));
 }
 
 
 double triangle (double lN1, double lN2, double x, double t)
 {
+	assert(!std::isnan   (lN1));
+	assert(!std::isinf   (lN1));
+	assert( std::isfinite(lN1));
+
+	assert(!std::isnan   (lN2));
+	assert(!std::isinf   (lN2));
+	assert( std::isfinite(lN2));
+
+	assert(!std::isnan   (x));
+	assert(!std::isinf   (x));
+	assert( std::isfinite(x));
+
+	assert(!std::isnan   (t));
+	assert(!std::isinf   (t));
+	assert( std::isfinite(t));
 
 		if (t == 0)
 		{
@@ -188,6 +278,35 @@ double triangle (double lN1, double lN2, double x, double t)
 
 double u0Triangle(double x, int l, double h, double lN1, double lN2)
 {
+	if (lN1 == 0.0)
+	{
+
+	}
+	else
+	{
+		assert(!std::isnan   (lN1));
+		assert(!std::isinf   (lN1));
+		assert( std::isfinite(lN1));
+	}
+
+	assert(!std::isnan   (lN2));
+	assert(!std::isinf   (lN2));
+	assert( std::isfinite(lN2));
+
+	assert(!std::isnan   (x));
+	assert(!std::isinf   (x));
+	assert( std::isfinite(x));
+
+	assert(!std::isnan   (l));
+	assert(!std::isinf   (l));
+	assert( std::isfinite(l));
+	assert((0 <= l) && (l <= 20));
+
+
+	assert(!std::isnan   (h));
+	assert(!std::isinf   (h));
+	assert( std::isfinite(h));
+
 		static double intervalN1;
 		static double intervalN2;
 
@@ -317,6 +436,14 @@ double u0Triangle(double x, int l, double h, double lN1, double lN2)
 						break;
 				}
 		}
+
+		assert(!std::isnan   (intervalN1));
+		assert(!std::isinf   (intervalN1));
+		assert( std::isfinite(intervalN1));
+
+		assert(!std::isnan   (intervalN2));
+		assert(!std::isinf   (intervalN2));
+		assert( std::isfinite(intervalN2));
 
 		return intervalN1 + intervalN2;
 }

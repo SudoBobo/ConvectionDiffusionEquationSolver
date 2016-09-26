@@ -215,6 +215,11 @@ State State::operator +(const State & anotherState) const
 
 State State::operator *(double coefficient) const
 {
+
+	assert(!std::isnan   (coefficient));
+	assert(!std::isinf   (coefficient));
+	assert( std::isfinite(coefficient));
+
 		State temp(m_iSize, m_jSize, m_kSize, m_conditions);
 		for (int i = 0; i < m_iSize; i++)
 		{
@@ -254,9 +259,30 @@ std::vector <double> State::makeValueVector() const
 		{
 			// with another division the calculations may be more accurate
 			x = i * m_conditions->getSpatialStep() / 2.0;
-			value[ i * 2] = m_state[i][0][0] + m_state[i][0][1] * x;
+
+			assert(!std::isnan   (x));
+			assert(!std::isinf   (x));
+			assert( std::isfinite(x));
+
+			value[i * 2] = m_state[i][0][0] + m_state[i][0][1] * x;
+
+			assert(!std::isnan   (value[i * 2]));
+			assert(!std::isinf   (value[i * 2]));
+			assert( std::isfinite(value[i * 2]));
+
 			x += m_conditions->getSpatialStep() / 2.0;
+
+			assert(!std::isnan   (x));
+			assert(!std::isinf   (x));
+			assert( std::isfinite(x));
+
 			value[(i * 2) + 1]  = m_state[i][0][0] + m_state[i][0][1] * x;
+
+
+			assert(!std::isnan   (value[i * 2 + 1]));
+			assert(!std::isinf   (value[i * 2 + 1]));
+			assert( std::isfinite(value[i * 2 + 1]));
+
 			// x(j-1/2)
 //			if ((i % 2) == 0)
 //			{
@@ -270,7 +296,11 @@ std::vector <double> State::makeValueVector() const
 		}
 		return value;
 	}
+	std::range_error("reached end of makeValue function and didn't calculated anything");
+	std::vector <double> error = {1.0};
+	return error;
 }
+
 Conditions * State::getConditions() const
 {
 	return m_conditions;

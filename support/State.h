@@ -4,7 +4,10 @@
 #include "support/Conditions.h"
 #include "support/Polynomial.h"
 #include "support/State.h"
+
 #include <vector>
+#include <assert.h>
+#include <cmath>
 
 //checked
 class State

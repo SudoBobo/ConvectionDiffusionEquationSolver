@@ -48,15 +48,17 @@ int main ()
 	const double velocityMagnitude = 1.0;
 	const double timeStep  = (courantNumber * spatialStep) / velocityMagnitude;
 	const int timeSteps = static_cast <int>(T / timeStep);
-
-	Conditions conditions(spatialStep, timeStep, spatialSteps, timeSteps, a, b, T);
-	Problem problem;
-
+//fine
 	const int k = 1;
-	std::vector <int> time = {0, 10};
+
+	Conditions conditions(spatialStep, timeStep, spatialSteps, timeSteps, a, b,
+						  T, k);
+	Problem problem;
+//fine
+	std::vector <int> timeToMakeGNUPlots = {0, 10};
 	std::string name = "Triangle";
 	InitialState triangleInitialState(spatialSteps, 1, k+1, &conditions,
-							  time, name, 0.0, 20.0,
+							  timeToMakeGNUPlots, name, 0.0, 20.0,
 							   u0Triangle);
 	std::vector <InitialState*> initialStates;
 	initialStates.push_back(&triangleInitialState);
@@ -99,8 +101,6 @@ GalerkinSystemMaker galerkinSystemMaker(&problem, &conditions, k);
 	 solver.solveAll(limiters, streams, initialStates);
 	 return 0;
 }
-//указателей на лимитеры-хуитеры, стримы-хуимы, туда сюда толкаешь
-	// как насвай по дёснам
 
 	//!! ТЕСТЫ ОСТАВТЬ ОКАЯННЫЙ !!
 //	State s(2, 1, 2, &conditions);
