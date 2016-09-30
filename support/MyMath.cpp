@@ -224,7 +224,7 @@ int sgn (double val)
 }
 
 
-double triangle (double lN1, double lN2, double x, double t)
+double AnalyticalTriangle (double lN1, double lN2, double x, double t)
 {
 	assert(!std::isnan   (lN1));
 	assert(!std::isinf   (lN1));
@@ -318,8 +318,8 @@ double u0Triangle(double x, int l, double h, double lN1, double lN2)
 		static double xPrev;
 		static double xNext;
 
-		xPrev = x - h;
-		xNext = x + h;
+		xPrev = x - h * 0.5;
+		xNext = x + h * 0.5;
 		assert((l == 0) || (l == 1));
 		switch (l)
 		{

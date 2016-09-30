@@ -10,6 +10,7 @@ double calcAvgValue(const double spatialStep,
 double integral23(const int l, const double spatialStep,
 				  const Polynomial &u);
 double u0Triangle(double x, int l, double h, double lN1, double lN2);
+double AnalyticalTriangle (double lN1, double lN2, double x, double t);
 
 
 // m - function from limiter definition from article

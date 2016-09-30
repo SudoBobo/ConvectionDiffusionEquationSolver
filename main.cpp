@@ -26,23 +26,19 @@
 #include "systemSolvers/EulerSystemSolver.h"
 
 #include "support/MyMath.h"
+double u0StepDown (double x, double l, double h, double lN1, double lN2);
 
 int main ()
 {
-
-	// прикрутить человеческие начальные условия +
-	// затычки заменить на расчёты нормальные
-	// мэйн подправить
-	// довести до кипения
+	// аналитическое решение генрирует
 	// добавить гну плот
-	// докрутить хуюльки
 
 	const double a = 0.0;
 	const double b = 520.0;
-	const double spatialStep = 1;
+	const double spatialStep = 0.1;
 	const int spatialSteps = static_cast <int>(std::floor((b - a) / spatialStep));
 
-	const double T = 10.0;
+	const double T = 10;
 	const double courantNumber = 0.1;
 	//?
 	const double velocityMagnitude = 1.0;
@@ -62,6 +58,14 @@ int main ()
 							   u0Triangle);
 	std::vector <InitialState*> initialStates;
 	initialStates.push_back(&triangleInitialState);
+
+
+//	std::string name = "StepDown";
+//	InitialState stepDownInitialState(spatialSteps, 1, k+1, &conditions,
+//							  timeToMakeGNUPlots, name, 0.0, 20.0,
+//							   u0StepDown);
+//	std::vector <InitialState*> initialStates;
+//	initialStates.push_back(&stepDownInitialState);
 
 	//Streams
 	GodunovStream godunovStream(& problem);
@@ -99,6 +103,7 @@ GalerkinSystemMaker galerkinSystemMaker(&problem, &conditions, k);
 
 	 Solver solver(& galerkinSystemMaker, & eulerSystemSolver, & conditions);
 	 solver.solveAll(limiters, streams, initialStates);
+
 	 return 0;
 }
 
@@ -163,3 +168,39 @@ GalerkinSystemMaker galerkinSystemMaker(&problem, &conditions, k);
 //	Polynomial ass(dick, 20, 1);
 //	std::cout << calcAvgValue(1.0, ass) << std::endl;
 //	std::cout << 205 << std::endl;
+
+double u0StepDown (double x, double l, double h, double lN1, double lN2)
+{
+	static double a;
+	static double b;
+	// note that in other parts there may be mistake
+	// with a = x - h, b = x + h
+	// while the right variant is
+	// a = x - h * 0.5;
+	// b = x + h * 0.5;
+	a = x - h * 0.5;
+	b = x + h * 0.5;
+	int k = static_cast <int> (l);
+	switch(k)
+	{
+	case 0:
+		if ((0 <= x) && (x <= lN1))
+		{
+			return (b - a) / h;
+		}
+		else
+		{
+			return 0.0;
+		}
+	case 1:
+		if ((0 <= x) && (x <= lN1))
+		{
+			return 3.0 * ((b * b - a * a) - 6.0 * x * (b - a)) / (h * h);
+		}
+		else
+		{
+			return 0.0;
+		}
+
+	}
+}

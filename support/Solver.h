@@ -27,6 +27,7 @@ protected:
 	State m_origState;
 	State m_newState;
 	std::vector <double> m_valueVectorForFileWriter;
+	std::vector <double> m_valueVectorForAnalyticalFileWriter;
 
 	FileWriter m_numericalFileWriter;
 	FileWriter m_analyticalFileWriter;

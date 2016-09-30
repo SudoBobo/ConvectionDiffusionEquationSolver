@@ -1,4 +1,6 @@
 #include "support/InitialState.h"
+#include "MyMath.h"
+#include <iostream>
 double triangle(double x, int l, double h, double lN1, double lN2);
 
 InitialState::InitialState(int iSize, int jSize, int kSize, Conditions * conditions)
@@ -117,8 +119,8 @@ double triangle(double x, int l, double h, double lN1, double lN2)
 		static double xPrev;
 		static double xNext;
 
-		xPrev = x - h;
-		xNext = x + h;
+		xPrev = x - h * 0.5;
+		xNext = x + h * 0.5;
 		assert((l == 0) || (l == 1));
 		switch (l)
 		{
@@ -279,4 +281,28 @@ double triangle(double x, int l, double h, double lN1, double lN2)
 		else
 			return intervalN1 + intervalN2;
 }
+
+std::vector <double> InitialState::makeAnalyticalValueVector(int t) const
+{
+	assert((this->kSize() == 1) || (this->kSize() == 2));
+
+	static int valueGridSize = this->iSize() * this->kSize();
+	static std::vector <double> value(valueGridSize);
+
+		static double x;
+		static double newH;
+		newH =  this->getConditions()->getSpatialStep() * (1.0 / this->kSize());
+		for (int i = 0; i < valueGridSize; i++)
+		{
+			x =  i * newH;
+			value[i] = AnalyticalTriangle (0.0, 20.0, x, t);
+		}
+
+	return value;
+	std::range_error("reached end of makeValue function and didn't calculated anything");
+	std::vector <double> error = {1.0};
+	return error;
+}
+
+
 

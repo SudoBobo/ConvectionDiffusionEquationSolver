@@ -9,17 +9,28 @@ Solver::Solver(SystemMaker * systemMaker, SystemSolver * systemSolver,
 	  m_conditions(conditions)
 {
 	m_systemSolver->setSystemMaker(m_systemMaker);
-	m_numericalFileWriter.setPrecision(6);
 
 	std::vector <int> newGridSize = {((m_systemMaker->getK() + 1) *
 					  int(m_conditions->getSpatialSteps())), 0, 0};
 
+	m_numericalFileWriter.setPrecision(6);
 	m_numericalFileWriter.setGridSize(newGridSize);
 	m_numericalFileWriter.setGeneralFileName("part0_");
 	m_numericalFileWriter.setGeneralHeaderName("file");
 	m_numericalFileWriter.setPath("/home/bobo/newData/");
 
 	m_numericalFileWriter.setSource(&m_valueVectorForFileWriter);
+
+
+	 m_analyticalFileWriter.setPrecision(6);
+	 m_analyticalFileWriter.setGridSize(newGridSize);
+	 m_analyticalFileWriter.setGeneralFileName("part0_");
+	 m_analyticalFileWriter.setGeneralHeaderName("file");
+	 m_analyticalFileWriter.setPath("/home/bobo/newData/");
+
+	 m_analyticalFileWriter.setSource(&m_valueVectorForAnalyticalFileWriter);
+
+
 
 	//	FileWriter m_analyticalFileWriter;
 	//	FileWriter m_errorFileWriter;
@@ -41,11 +52,26 @@ dataGeneralDirectoryName = m_systemMaker->getName() + m_systemSolver->getName() 
 			   limiter->getName() + stream->getName() +
 			   initialState->getName();
 
+
+
 static std::string command;
 command = "mkdir " + m_numericalFileWriter.getPath() + dataGeneralDirectoryName;
 std::system(command.c_str());
 
 m_numericalFileWriter.setDirectory(dataGeneralDirectoryName);
+
+
+
+std::string analyticalGeneralDirectoryName = dataGeneralDirectoryName +
+											 "Analytical";
+
+command = "mkdir " + m_analyticalFileWriter.getPath() +
+		  analyticalGeneralDirectoryName;
+std::system(command.c_str());
+
+m_analyticalFileWriter.setDirectory(analyticalGeneralDirectoryName);
+
+
 
 static int timeSteps;
 timeSteps = m_conditions->getTimeSteps();
@@ -84,7 +110,13 @@ for (int t = 0; t <= timeSteps; t++)
 	{
 		//!!
 		m_valueVectorForFileWriter = m_origState.makeValueVector();
+		m_valueVectorForAnalyticalFileWriter =
+				initialState->makeAnalyticalValueVector(t);
+
+
+
 		m_numericalFileWriter.write(t);
+		m_analyticalFileWriter.write(t);
 
 		if (std::count(initialState->getTimeMoments().begin(),
 				  initialState->getTimeMoments().end(), t) == 1 )
@@ -116,4 +148,12 @@ void Solver::solveAll(std::vector<Limiter*> & limiters,
 				}
 			}
 	}
+
+	// analytical solution
+	// add extra directory
+	// create temp states
+	// calc solution
+	// write there
+
+
 }

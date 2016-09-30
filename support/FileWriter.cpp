@@ -34,12 +34,16 @@ void FileWriter:: clean () const
 	std::string command = "rm";
 	command += " ";
 	command += m_path;
+	command += m_directory;
+	command += R"(/)";
 	command += "*.vtr";
 	int ifCommandExecuted = std::system(command.c_str());
 
 	command = "rm";
 	command += " ";
 	command += m_path;
+	command += m_directory;
+	command += R"(/)";
 	command += "*.pvtr";
 	ifCommandExecuted = std::system(command.c_str());
 }

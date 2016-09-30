@@ -19,6 +19,9 @@ public:
 	const std::vector <int> & getTimeMoments() const;
 	State getState() const;
 
+	std::vector <double> makeAnalyticalValueVector(int t) const;
+
+
 private:
 	std::vector <int> m_timeMomentsForGNUplotMaker;
 	std::string m_name;

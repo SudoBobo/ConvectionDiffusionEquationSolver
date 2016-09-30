@@ -12,7 +12,7 @@ double Problem::f(const double u) const
 	assert(!std::isnan   (u));
 	assert(!std::isinf   (u));
 	assert( std::isfinite(u));
-	return (u * u) / 2.0;
+	return (u * u) * 0.5;
 }
 
 double Problem::fDerivative(const double u) const

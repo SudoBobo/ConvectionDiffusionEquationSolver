@@ -259,6 +259,8 @@ std::vector <double> State::makeValueVector() const
 		{
 			// with another division the calculations may be more accurate
 			x = i * m_conditions->getSpatialStep() / 2.0;
+//			value[2 * i]     = m_state[i][0][0];
+//			value[2 * i + 1] = m_state[i][0][0];
 
 			assert(!std::isnan   (x));
 			assert(!std::isinf   (x));
@@ -283,16 +285,15 @@ std::vector <double> State::makeValueVector() const
 			assert(!std::isinf   (value[i * 2 + 1]));
 			assert( std::isfinite(value[i * 2 + 1]));
 
-			// x(j-1/2)
-//			if ((i % 2) == 0)
-//			{
-//				value[i] = m_state[i][0][0] + m_state[i][0][1] * x;
-//			}
-//			// x(j+1/2)
-//			else
-//			{
-//				value [i] = 42;
-//			}
+			if ((i % 2) == 0)
+			{
+				value[i] = m_state[i][0][0] + m_state[i][0][1] * x;
+			}
+			// x(j+1/2)
+			else
+			{
+				value [i] = 42;
+			}
 		}
 		return value;
 	}
