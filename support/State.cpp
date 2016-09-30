@@ -257,8 +257,10 @@ std::vector <double> State::makeValueVector() const
 
 		for (int i = 0; i < m_iSize; i++)
 		{
+			static double h;
+			h = m_conditions->getSpatialStep();
 			// with another division the calculations may be more accurate
-			x = i * m_conditions->getSpatialStep() / 2.0;
+			x = i * h;
 //			value[2 * i]     = m_state[i][0][0];
 //			value[2 * i + 1] = m_state[i][0][0];
 
@@ -266,7 +268,8 @@ std::vector <double> State::makeValueVector() const
 			assert(!std::isinf   (x));
 			assert( std::isfinite(x));
 
-			value[i * 2] = m_state[i][0][0] + m_state[i][0][1] * x;
+			value[i * 2] = m_state[i][0][0] + m_state[i][0][1] *
+						   (((x + h * 0.25) - (x + h * 0.5)) / h);
 
 			assert(!std::isnan   (value[i * 2]));
 			assert(!std::isinf   (value[i * 2]));
@@ -278,22 +281,13 @@ std::vector <double> State::makeValueVector() const
 			assert(!std::isinf   (x));
 			assert( std::isfinite(x));
 
-			value[(i * 2) + 1]  = m_state[i][0][0] + m_state[i][0][1] * x;
-
+			value[i * 2 + 1] = m_state[i][0][0] + m_state[i][0][1] *
+						   (((x + h * 0.75) - (x + h * 0.5)) / h);
 
 			assert(!std::isnan   (value[i * 2 + 1]));
 			assert(!std::isinf   (value[i * 2 + 1]));
 			assert( std::isfinite(value[i * 2 + 1]));
 
-			if ((i % 2) == 0)
-			{
-				value[i] = m_state[i][0][0] + m_state[i][0][1] * x;
-			}
-			// x(j+1/2)
-			else
-			{
-				value [i] = 42;
-			}
 		}
 		return value;
 	}
