@@ -28,11 +28,11 @@ InitialState::InitialState(int iSize, int jSize, int kSize, Conditions * conditi
 						  static double h;
 						  h = this->getConditions()->getSpatialStep();
 
-//						  this->operator ()(i, j, k) =
-//						  initialStateMaker(x, l, h, lN1, lN2);
-
 						  this->operator ()(i, j, k) =
-						  triangle(x, l, h, lN1, lN2);
+						  initialStateMaker(x, l, h, lN1, lN2);
+
+//						  this->operator ()(i, j, k) =
+//						  triangle(x, l, h, lN1, lN2);
 					  }
 			  }
 	}

@@ -293,15 +293,29 @@ double u0Triangle(double x, int l, double h, double lN1, double lN2)
 	assert(!std::isinf   (lN2));
 	assert( std::isfinite(lN2));
 
-	assert(!std::isnan   (x));
-	assert(!std::isinf   (x));
-	assert( std::isfinite(x));
+	if (x == 0)
+	{
 
-	assert(!std::isnan   (l));
-	assert(!std::isinf   (l));
-	assert( std::isfinite(l));
-	assert((0 <= l) && (l <= 20));
+	}
+	else
+	{
+		assert(!std::isnan   (x));
+		assert(!std::isinf   (x));
+		assert( std::isfinite(x));
+	}
 
+
+	if (l == 0)
+	{
+
+	}
+	else
+	{
+		assert(!std::isnan   (l));
+		assert(!std::isinf   (l));
+		assert( std::isfinite(l));
+		assert((0 <= l) && (l <= 20));
+	}
 
 	assert(!std::isnan   (h));
 	assert(!std::isinf   (h));
@@ -327,49 +341,59 @@ double u0Triangle(double x, int l, double h, double lN1, double lN2)
 
 				if ((lN1 <= xPrev) && (xNext <= middle))
 				{
-						intervalN1 = ((2.0) / (h * (lN2 - lN1))) *
-												 (
-												 xNext * (xNext / 2.0 - lN1) -
-												 xPrev * (xPrev / 2.0 - lN1)
-												 );
+//						intervalN1 = ((2.0) / (h * (lN2 - lN1))) *
+//												 (
+//												 xNext * (xNext / 2.0 - lN1) -
+//												 xPrev * (xPrev / 2.0 - lN1)
+//												 );
+
+						intervalN1 =			 (
+												 xNext * (xNext - 2.0 * lN1) -
+												 xPrev * (xPrev - 2.0 *  lN1)
+												 ) / (h * (lN2 - lN1));
 						intervalN2 = 0.0;
+				return intervalN1;
 				break;
 				}
 
-				if ((xPrev <= middle) && (middle <= xNext))
+
+				if ((xPrev <= middle ) && (middle < xNext))
 				{
-						intervalN1 = ((2.0) / (h * (lN2 - lN1))) *
-												 (
-												 lN1 * (lN1 / 2.0 - lN1) -
-												 xPrev * (xPrev / 2.0 - lN1)
-												 );
-						intervalN2 = ((2.0) / (h * (lN2 - lN1))) *
-												 (
-												 xNext * (lN2 - xNext / 2.0) -
-												 lN1 * (lN2 - lN1 / 2.0)
-												 );
+						intervalN1 =			 (
+												 middle * (middle - 2.0 * lN1) -
+												 xPrev * (xPrev - 2.0 *  lN1)
+												 ) / (h * (lN2 - lN1));
+
+						intervalN2 = 			 (
+												 xNext * (2.0 * lN2 - xNext) -
+												 middle * (2.0 * lN2 - middle)
+												 )  / (h * (lN2 - lN1));
+						return intervalN1 + intervalN2;
 						break;
 				}
 
-				if ((middle <= xPrev) && (xNext <= lN2))
+				if ((middle < xPrev) && (xNext <= lN2))
 				{
 						intervalN1 = 0.0;
-						intervalN2 = ((2.0) / (h * (lN2 - lN1))) *
-												 (
-												 xNext * (lN2 - xNext / 2.0) -
-												 xPrev * (lN2 - xPrev / 2.0)
-												 );
+
+						intervalN2 = 			 (
+												 xNext * (2.0 * lN2 - xNext) -
+												 xPrev * (2.0 * lN2 - xPrev)
+												 )  / (h * (lN2 - lN1));
+						return intervalN2;
+
 						break;
 				}
 
 				if ((xPrev <= lN2) && (lN2 < xNext))
 				{
 						intervalN1 = 0.0;
-						intervalN2 = ((2.0) / (h * (lN2 - lN1))) *
-												 (
-												 lN2 * (lN2 - lN2 / 2.0) -
-												 xPrev * (lN2 - xPrev / 2.0)
-												 );
+						intervalN2 = 			 (
+												 lN2 * (2.0 * lN2 - lN2) -
+												 xPrev * (2.0 * lN2 - xPrev)
+												 )  / (h * (lN2 - lN1));
+						return intervalN2;
+
 						break;
 				}
 
@@ -377,55 +401,67 @@ double u0Triangle(double x, int l, double h, double lN1, double lN2)
 				{
 						intervalN1 = 0.0;
 						intervalN2 = 0.0;
+						return 0.0;
 						break;
 				}
 
 		case 1:
 				if ((lN1 <= xPrev) && (xNext <= middle))
 				{
-						intervalN1 = (2.0 * (6.0) / (h * (lN2 - lN1))) *
-												 (
-												 (xNext * xNext) * (xNext / 3.0 - lN1 / 2.0) -
-												 (xPrev * xPrev) * (xPrev / 3.0 - lN1 / 2.0)
-												 );
+						intervalN1 = (
+						4.0 * (xNext * xNext * xNext - xPrev * xPrev * xPrev) -
+						6.0 * x * (xNext * xNext - xPrev * xPrev) -
+						6.0 * lN1 * (xNext * xNext - xPrev * xPrev) +
+						12.0 * x * lN1 * (xNext - xPrev)
+									 ) / (h * h * (lN2 - lN1));
 						intervalN2 = 0.0;
+						return intervalN1;
 				break;
 				}
 
-				if ((xPrev <= middle) && (middle <= xNext))
+				if ((xPrev <= middle) && (middle < xNext))
 				{
-						intervalN1 = (2.0 * (6.0) / (h * (lN2 - lN1))) *
-												 (
-												 (lN2 * lN2) * (lN2 / 3.0 - lN1 / 2.0) -
-												 (xPrev * xPrev) * (xPrev / 3.0 - lN1 / 2.0)
-												 );
-						intervalN2 = (2.0 * (6.0) / (h * (lN2 - lN1))) *
-												 (
-												 (xNext * xNext) * (lN2 / 2.0 - xNext / 3.0) -
-												 (lN1 * lN1) * (lN2 / 2.0 - lN1 / 3.0)
-												 );
+					intervalN1 = (
+					4.0 * (middle * middle * middle - xPrev * xPrev * xPrev) -
+					6.0 * x * (middle * middle - xPrev * xPrev) -
+					6.0 * lN1 * (middle * middle - xPrev * xPrev) +
+					12.0 * x * lN1 * (middle - xPrev)
+								 ) / (h * h * (lN2 - lN1));
+
+					intervalN2 = (
+					 -4.0 * (xNext * xNext * xNext - middle * middle * middle) +
+					 6.0 * x * (xNext * xNext - middle * middle) +
+					 6.0 * lN2 * (xNext * xNext - middle * middle) -
+					 12.0 * x * lN2 * (xNext - middle)
+								  ) / (h * h * (lN2 - lN1));
+
+					return intervalN1 + intervalN2;
 						break;
 				}
 
 				if ((middle <= xPrev) && (xNext <= lN2))
 				{
 						intervalN1 = 0.0;
-						intervalN2 = (2.0 * (6.0) / (h * (lN2 - lN1))) *
-												 (
-												 (xNext * xNext) * (lN2 / 2.0 - xNext / 3.0) -
-												 (xPrev * xPrev) * (lN2 / 2.0 - xPrev / 3.0)
-												 );
+						intervalN2 = (
+						 -4.0 * (xNext * xNext * xNext - xPrev * xPrev * xPrev) +
+						 6.0 * x * (xNext * xNext - xPrev * xPrev) +
+						 6.0 * lN2 * (xNext * xNext - xPrev * xPrev) -
+						 12.0 * x * lN2 * (xNext - xPrev)
+									  ) / (h * h * (lN2 - lN1));
+						return intervalN2;
 						break;
 				}
 
 				if ((xPrev <= lN2) && (lN2 < xNext))
 				{
 						intervalN1 = 0.0;
-						intervalN2 = (2.0 * (6.0) / (h * (lN2 - lN1))) *
-												 (
-												 (lN2 * lN2) * (lN2 / 2.0 - lN2 / 3.0) -
-												 (xPrev * xPrev) * (lN2 / 2.0 - xPrev / 3.0)
-												 );
+						intervalN2 = (
+						 -4.0 * (lN2 * lN2 * lN2 - xPrev * xPrev * xPrev) +
+						 6.0 * x * (lN2 * lN2 - xPrev * xPrev) +
+						 6.0 * lN2 * (lN2 * lN2 - xPrev * xPrev) -
+						 12.0 * x * lN2 * (lN2 - xPrev)
+									  ) / (h * h * (lN2 - lN1));
+						return intervalN2;
 						break;
 				}
 
@@ -433,17 +469,28 @@ double u0Triangle(double x, int l, double h, double lN1, double lN2)
 				{
 						intervalN1 = 0.0;
 						intervalN2 = 0.0;
+						return 0.0;
 						break;
 				}
 		}
 
-		assert(!std::isnan   (intervalN1));
-		assert(!std::isinf   (intervalN1));
-		assert( std::isfinite(intervalN1));
+		if (intervalN1 != 0)
+		{
+			assert(!std::isnan   (intervalN1));
+			assert(!std::isinf   (intervalN1));
+			assert( std::isfinite(intervalN1));
+		}
 
-		assert(!std::isnan   (intervalN2));
-		assert(!std::isinf   (intervalN2));
-		assert( std::isfinite(intervalN2));
-
-		return intervalN1 + intervalN2;
+		if (intervalN2 != 0)
+		{
+			assert(!std::isnan   (intervalN2));
+			assert(!std::isinf   (intervalN2));
+			assert( std::isfinite(intervalN2));
+		}
+		if (intervalN2 == 0)
+				return intervalN1;
+		if (intervalN1 == 0)
+				return intervalN2;
+		else
+			return intervalN1 + intervalN2;
 }
