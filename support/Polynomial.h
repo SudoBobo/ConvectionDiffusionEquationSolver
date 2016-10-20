@@ -6,6 +6,8 @@
 class Polynomial
 {
 public:
+	// существенно, что
+	// k+1 равно числу коэфициентов, а k - это порядок полинома
 	Polynomial(const double * coefficients, const int j, const int k);
 	Polynomial(const int j, const int k);
 	Polynomial(const Polynomial & anotherPolynomial);

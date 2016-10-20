@@ -6,7 +6,7 @@
 Polynomial::Polynomial(const double * coefficients, const int j, const int k)
 	:m_coefficients(k+1)
 {
-	for (int l = 0; l <= k; l++)
+	for (int l = 0; l < k +1 ; l++)
 	{
 		m_coefficients[l] = coefficients[l];
 	}

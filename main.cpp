@@ -20,6 +20,8 @@
 
 #include "streams/Stream.h"
 #include "streams/GodunovStream.h"
+#include "streams/EOStream.h"
+#include "streams/LFStream.h"
 
 #include "systemSolvers/SystemSolver.h"
 #include "systemSolvers/RungeKuttaSystemSolver.h"
@@ -35,25 +37,30 @@ int main ()
 
 	const double a = 0.0;
 	const double b = 520.0;
-	const double spatialStep = 0.1;
+	const double spatialStep = 1;
 	const int spatialSteps = static_cast <int>(std::floor((b - a) / spatialStep));
 
-	const double T = 10;
+	const double T = 1000;
 	const double courantNumber = 0.1;
 	//?
 	const double velocityMagnitude = 1.0;
-	const double timeStep  = (courantNumber * spatialStep) / velocityMagnitude;
+	const double timeStep  = 1; //(courantNumber * spatialStep) / velocityMagnitude;
 	const int timeSteps = static_cast <int>(T / timeStep);
+	std::cout << "Full time = " << T << "seconds" << std::endl;
+	std::cout << "TimeStep = " << timeStep << std::endl;
 //fine
-	const int k = 1;
+	const int k = 0;
 
 	Conditions conditions(spatialStep, timeStep, spatialSteps, timeSteps, a, b,
 						  T, k);
 	Problem problem;
 //fine
 	std::vector <int> timeToMakeGNUPlots = {0, 10};
+	const int jSize = 1;
+
 	std::string name = "Triangle";
-	InitialState triangleInitialState(spatialSteps, 1, k+1, &conditions,
+	///!
+	InitialState triangleInitialState(spatialSteps, jSize, k+1, &conditions,
 							  timeToMakeGNUPlots, name, 0.0, 20.0,
 							   u0Triangle);
 	std::vector <InitialState*> initialStates;
@@ -69,8 +76,17 @@ int main ()
 
 	//Streams
 	GodunovStream godunovStream(& problem);
+//	std::vector <Stream*> streams;
+
+//	EOStream EOstream (& problem);
+	LFStream LFstream (& problem);
+
 	std::vector <Stream*> streams;
+//	streams.push_back(&EOstream);
+	streams.push_back(&LFstream);
 	streams.push_back(&godunovStream);
+
+
 ////	EOStream EOstream(& problem);
 ////	LFStream LFstream(& problem);
 ////	LLFstream LLFstream (&problem);
@@ -103,7 +119,13 @@ GalerkinSystemMaker galerkinSystemMaker(&problem, &conditions, k);
 
 	 Solver solver(& galerkinSystemMaker, & eulerSystemSolver, & conditions);
 	 solver.solveAll(limiters, streams, initialStates);
+//	 std::cout << "test" << std::endl;
+//	 double boo = godunovStream(10, 10);
+//	 double coef [2] = {5.0, 5.0};
+//	 Polynomial testP(coef, 1, 1);
 
+//	State test (1,1,3, & conditions);
+//	Polynomial pol (coef,5, 5)
 	 return 0;
 }
 
@@ -183,10 +205,15 @@ double u0StepDown (double x, double l, double h, double lN1, double lN2)
 	int k = static_cast <int> (l);
 	switch(k)
 	{
+	// функция возвращает коэфициенты - нет ли тут ошибки с тем, что мы не
+	// используем порядок многочлена?
 	case 0:
 		if ((0 <= x) && (x <= lN1))
 		{
-			return (b - a) / h;
+			// u = k * 1
+			return 1.0;
+			// the same, but more presice
+//			return (b - a) / h;
 		}
 		else
 		{

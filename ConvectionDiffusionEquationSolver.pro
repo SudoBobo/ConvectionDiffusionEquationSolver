@@ -25,7 +25,9 @@ SOURCES += main.cpp \
     systemSolvers/RungeKuttaSystemSolver.cpp \
     systemSolvers/SystemSolver.cpp \
     support/Polynomial.cpp \
-    support/InitialState.cpp
+    support/InitialState.cpp \
+    streams/EOStream.cpp \
+    streams/LFStream.cpp
 
 HEADERS += \
     limiters/Limiter.h \
@@ -49,5 +51,7 @@ HEADERS += \
     systemSolvers/RungeKuttaSystemSolver.h \
     systemSolvers/SystemSolver.h \
     support/Polynomial.h \
-    support/InitialState.h
+    support/InitialState.h \
+    streams/EOStream.h \
+    streams/LFStream.h
 

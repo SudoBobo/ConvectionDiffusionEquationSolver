@@ -30,7 +30,8 @@ std::string MUSCLLimiter::getName() const
 Polynomial MUSCLLimiter::limit(const Polynomial & uPrev, const Polynomial & u,
 											  const Polynomial & uNext) const
 {
-
+	if (m_k == 1)
+	{
 	static const double k = 1;
 	static double h;
 	h = m_conditions->getSpatialStep();
@@ -84,6 +85,9 @@ Polynomial MUSCLLimiter::limit(const Polynomial & uPrev, const Polynomial & u,
 	uNew(0) = avgValue - xJ * m(u(1), b, c);
 	uNew(1) = m(u(1), b, c);
 
+//	uNew(0) = u(0);
+//	uNew(1) = u(1);
+
 	assert(!std::isnan(uNew(0)));
 	assert(!std::isinf(uNew(0)));
 	assert(std::isfinite(uNew(0)));
@@ -93,4 +97,10 @@ Polynomial MUSCLLimiter::limit(const Polynomial & uPrev, const Polynomial & u,
 	assert(std::isfinite(uNew(1)));
 
 	return uNew;
+	}
+
+	if (m_k == 0)
+	{
+		return u;
+	}
 }

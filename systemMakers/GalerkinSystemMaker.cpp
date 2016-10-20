@@ -29,10 +29,20 @@ double GalerkinSystemMaker::dU(const int l, const Polynomial &  uPrev,
 
 	static const double spatialStep = m_conditions->getSpatialStep();
 
+	if (l == 0)
+	{
+		uValue = u(0);
+		uPrevValue =  uPrev(0);
+		uNextValue =  uNext(0);
+	}
+	//!!!
+	else
+	{
 	uValue = calcAvgValue(spatialStep, u);
 	uPrevValue =  calcAvgValue(spatialStep, uPrev);
 	uNextValue =  calcAvgValue(spatialStep, uNext);
-
+	}
+	//!!!
 
 	assert(!std::isnan(uValue));
 	assert(!std::isinf(uValue));
@@ -57,9 +67,22 @@ double GalerkinSystemMaker::dU(const int l, const Polynomial &  uPrev,
 	assert(!std::isinf   (std::pow(-1.0, l)));
 	assert( std::isfinite(std::pow(-1.0, l)));
 
+	if (l  == 0)
+	{
+		return
+						 (
+								m_stream->operator ()(uPrevValue, uValue) -
+								m_stream->operator ()(uValue, uNextValue)
+						 ) / m_conditions->getSpatialStep();
+//		return
+//						 (
+//								m_problem->f(uPrevValue) - m_problem->f(uNextValue)
+//						 ) / m_conditions->getSpatialStep();
+	}
+
 	return ((2.0 * l + 1.0) / m_conditions->getSpatialStep()) *
 					 (
-					   (integral) - (m_stream->operator ()(uValue, uNextValue) -
+					   (integral) - (m_stream->operator ()(uValue, uNextValue) +
 							std::pow(-1.0, l) *
 							m_stream->operator ()(uPrevValue, uValue))
 					 );

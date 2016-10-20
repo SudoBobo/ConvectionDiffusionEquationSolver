@@ -79,7 +79,16 @@ Polynomial State::operator()(int i, int j) const
 		if((i > m_iSize) || (j > m_jSize) ||(i < 0)||(j<0))
 				throw std::range_error("Try to get an access to point that doesn't exist");
 
-		Polynomial temp(m_state[i][j], i, m_kSize - 1);
+		// ещё проблема с размерами сетки
+
+		//!!! так было раньше
+		int polynomialOrder = m_kSize - 1;
+		Polynomial temp(m_state[i][j], i, polynomialOrder);
+
+		// кажется, правильный вариант
+		// нет, неправильный m_kSize = 1 для полинома порядка
+//		Polynomial temp(m_state[i][j], i, m_kSize);
+
 		return temp;
 }
 

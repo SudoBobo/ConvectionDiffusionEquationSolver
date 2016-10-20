@@ -10,10 +10,12 @@ double calcAvgValue(const double spatialStep,
 	assert(!std::isnan   (u(0)));
 	assert(!std::isinf   (u(0)));
 	assert( std::isfinite(u(0)));
-
+	if (u.getOrder() == 1)
+	{
 	assert(!std::isnan   (u(1)));
 	assert(!std::isinf   (u(1)));
 	assert( std::isfinite(u(1)));
+	}
 
 	//вычисление среднего значения по промежутку от j- 1/2 до j + 1/2
 	// x(j), x(j+1/2), x(j-1/2)
@@ -38,7 +40,9 @@ double calcAvgValue(const double spatialStep,
 	{
 	case 0:
 		return u(0);
+
 	case 1:
+		//!
 		// works just fine, don't touch please
 		return u(0) + (u(1) / (h * h)) *
 		(xJnext * xJnext - xJprev * xJprev) -
@@ -55,10 +59,13 @@ double integral23(const int l, const double spatialStep,
 	assert(!std::isnan   (u(0)));
 	assert(!std::isinf   (u(0)));
 	assert( std::isfinite(u(0)));
-
+//	std::cout << u.getOrder() << std::endl;
+	if (u.getOrder() == 1)
+	{
 	assert(!std::isnan   (u(1)));
 	assert(!std::isinf   (u(1)));
 	assert( std::isfinite(u(1)));
+	}
 
 	static double xJ;
 	static double xJnext;
@@ -493,4 +500,9 @@ double u0Triangle(double x, int l, double h, double lN1, double lN2)
 				return intervalN2;
 		else
 			return intervalN1 + intervalN2;
+}
+
+double AnalyticalStep (double lN1, double lN2, double x, double t)
+{
+
 }

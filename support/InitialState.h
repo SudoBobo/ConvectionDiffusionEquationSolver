@@ -10,8 +10,9 @@ class InitialState : public State
 {
 public:
 	InitialState(int iSize, int jSize, int kSize, Conditions * conditions);
+	// помимо initialStateMaker'a стоит ещё передавать analyticalSolver
 	InitialState(int iSize, int jSize, int kSize, Conditions * conditions,
-		  std::vector <int> time, std::__cxx11::string name, double lN1, double lN2,
+		  std::vector <int> timeMomentsForGNUplotMaker, std::__cxx11::string name, double lN1, double lN2,
 		  std::function <double(double, int, double, double, double)>
 				 initialStateMaker);
 
@@ -24,6 +25,8 @@ public:
 
 private:
 	std::vector <int> m_timeMomentsForGNUplotMaker;
+	std::function <double(double, int, double, double, double)>
+		   m_analyticalStateMaker;
 	std::string m_name;
 };
 

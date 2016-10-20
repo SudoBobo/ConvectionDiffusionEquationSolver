@@ -2,6 +2,7 @@
 #include "MyMath.h"
 #include <iostream>
 double triangle(double x, int l, double h, double lN1, double lN2);
+double AnalyticalStepDown(double lN1, double lN2, double x, int t);
 
 InitialState::InitialState(int iSize, int jSize, int kSize, Conditions * conditions)
 	:State(iSize, jSize, kSize, conditions)
@@ -10,12 +11,12 @@ InitialState::InitialState(int iSize, int jSize, int kSize, Conditions * conditi
 }
 
 InitialState::InitialState(int iSize, int jSize, int kSize, Conditions * conditions,
-	  std::vector <int> time, std::string name, double lN1, double lN2,
+	  std::vector <int> timeMomentsForGNUplotMaker, std::string name, double lN1, double lN2,
 	  std::function <double(double, int, double, double, double)>
 						   initialStateMaker)
 	:InitialState(iSize, jSize, kSize, conditions)
 {
-	m_timeMomentsForGNUplotMaker = time;
+	m_timeMomentsForGNUplotMaker = timeMomentsForGNUplotMaker;
 	m_name = name;
 	for (int i = 0; i < this->iSize(); i++) {
 			  for (int j = 0; j < this->jSize(); j++) {
@@ -30,9 +31,6 @@ InitialState::InitialState(int iSize, int jSize, int kSize, Conditions * conditi
 
 						  this->operator ()(i, j, k) =
 						  initialStateMaker(x, l, h, lN1, lN2);
-
-//						  this->operator ()(i, j, k) =
-//						  triangle(x, l, h, lN1, lN2);
 					  }
 			  }
 	}
@@ -291,11 +289,14 @@ std::vector <double> InitialState::makeAnalyticalValueVector(int t) const
 
 		static double x;
 		static double newH;
-		newH =  this->getConditions()->getSpatialStep() * (1.0 / this->kSize());
+		newH =  this->getConditions()->getSpatialStep() / this->kSize();
 		for (int i = 0; i < valueGridSize; i++)
 		{
 			x =  i * newH;
 			value[i] = AnalyticalTriangle (0.0, 20.0, x, t);
+//			value[i] = AnalyticalStepDown (0.0, 20.0, x, t);
+
+//			value[i] = AnalyticalSolution (0.0, 20.0, x, t);
 		}
 
 	return value;
@@ -304,5 +305,16 @@ std::vector <double> InitialState::makeAnalyticalValueVector(int t) const
 	return error;
 }
 
+double AnalyticalStepDown(double lN1, double lN2, double x, int t)
+{
+	if ((lN1 <= x) && (x <= (lN1 + 0.5 * t)))
+	{
+		return 1.0;
+	}
+	else
+	{
+		return 0.0;
+	}
+}
 
 

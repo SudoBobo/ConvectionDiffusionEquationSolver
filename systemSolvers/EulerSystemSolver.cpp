@@ -29,9 +29,17 @@ void EulerSystemSolver::calcNextState(const State & currentState,
 
 	static int iMax;
 	iMax =  currentState.iSize() - 1;
-		// j = 0
+
+
+		// j (номер узла) = 0
+		//! корректно ли работает выдача полинома*?
+		//!
+		//! CHANGE THIS
+//		u = currentState(0,0);
+//		uPrev = currentState(iMax, 0);
+//		uNext = currentState(1, 0);
 		u = currentState(0,0);
-		uPrev = currentState(iMax, 0);
+		uPrev = currentState(0, 0);
 		uNext = currentState(1, 0);
 
 		assert(!std::isnan   (uPrev(0)));
@@ -45,7 +53,8 @@ void EulerSystemSolver::calcNextState(const State & currentState,
 		assert(!std::isnan   (uNext(0)));
 		assert(!std::isinf   (uNext(0)));
 		assert( std::isfinite(uNext(0)));
-
+		if (currentState.kSize() == 2)
+		{
 		assert(!std::isnan   (uPrev(1)));
 		assert(!std::isinf   (uPrev(1)));
 		assert( std::isfinite(uPrev(1)));
@@ -57,7 +66,7 @@ void EulerSystemSolver::calcNextState(const State & currentState,
 		assert(!std::isnan   (uNext(1)));
 		assert(!std::isinf   (uNext(1)));
 		assert( std::isfinite(uNext(1)));
-
+		}
 		tempPoly = uNew (uPrev, u, uNext);
 		nextState(0, 0, tempPoly);
 
@@ -65,6 +74,8 @@ void EulerSystemSolver::calcNextState(const State & currentState,
 		u = currentState(iMax, 0);
 		uPrev = currentState(iMax - 1, 0);
 		uNext = currentState(0, 0);
+
+		//CHANGE THIS
 
 		assert(!std::isnan   (uPrev(0)));
 		assert(!std::isinf   (uPrev(0)));
@@ -78,6 +89,8 @@ void EulerSystemSolver::calcNextState(const State & currentState,
 		assert(!std::isinf   (uNext(0)));
 		assert( std::isfinite(uNext(0)));
 
+		if (currentState.kSize() == 2)
+		{
 		assert(!std::isnan   (uPrev(1)));
 		assert(!std::isinf   (uPrev(1)));
 		assert( std::isfinite(uPrev(1)));
@@ -89,6 +102,7 @@ void EulerSystemSolver::calcNextState(const State & currentState,
 		assert(!std::isnan   (uNext(1)));
 		assert(!std::isinf   (uNext(1)));
 		assert( std::isfinite(uNext(1)));
+		}
 
 		tempPoly = uNew (uPrev, u, uNext);
 		nextState(iMax, 0, tempPoly);
@@ -112,6 +126,8 @@ void EulerSystemSolver::calcNextState(const State & currentState,
 			assert(!std::isinf   (uNext(0)));
 			assert( std::isfinite(uNext(0)));
 
+			if (currentState.kSize() == 2)
+			{
 			assert(!std::isnan   (uPrev(1)));
 			assert(!std::isinf   (uPrev(1)));
 			assert( std::isfinite(uPrev(1)));
@@ -123,6 +139,7 @@ void EulerSystemSolver::calcNextState(const State & currentState,
 			assert(!std::isnan   (uNext(1)));
 			assert(!std::isinf   (uNext(1)));
 			assert( std::isfinite(uNext(1)));
+			}
 
 			tempPoly = uNew (uPrev, u, uNext);
 			nextState(i, 0, tempPoly);
@@ -140,10 +157,14 @@ Polynomial EulerSystemSolver::uNew(const Polynomial & uPrev, const Polynomial & 
 
 	for (int l = 0; l < k + 1; l++)
 	{
-		uTemp(l) = m_conditions->getTimeStep() *
+		uTemp(l) = u(l) + m_conditions->getTimeStep() *
 				   m_systemMaker->dU(l, uPrev, u, uNext);
+		//correct
+//		auto testDU = dU(l, uPrev, u, uNext);
 	}
-	return m_limiter->limit(uPrev, uTemp, uNext);
+	// !!!!
+	return uTemp;
+//	return m_limiter->limit(uPrev, uTemp, uNext);
 }
 
 std::string EulerSystemSolver::getName() const

@@ -10,15 +10,17 @@ Solver::Solver(SystemMaker * systemMaker, SystemSolver * systemSolver,
 {
 	m_systemSolver->setSystemMaker(m_systemMaker);
 
-	std::vector <int> newGridSize = {((m_systemMaker->getK() + 1) *
-					  int(m_conditions->getSpatialSteps())), 0, 0};
+	// newGridSize - создаётся только для записывателя в файл
+	int xSize = ((m_systemMaker->getK() + 1) *
+				  int(m_conditions->getSpatialSteps()));
+
+	std::vector <int> newGridSize = {xSize, 0, 0};
 
 	m_numericalFileWriter.setPrecision(6);
 	m_numericalFileWriter.setGridSize(newGridSize);
 	m_numericalFileWriter.setGeneralFileName("part0_");
 	m_numericalFileWriter.setGeneralHeaderName("file");
 	m_numericalFileWriter.setPath("/home/bobo/newData/");
-
 	m_numericalFileWriter.setSource(&m_valueVectorForFileWriter);
 
 
@@ -27,7 +29,6 @@ Solver::Solver(SystemMaker * systemMaker, SystemSolver * systemSolver,
 	 m_analyticalFileWriter.setGeneralFileName("part0_");
 	 m_analyticalFileWriter.setGeneralHeaderName("file");
 	 m_analyticalFileWriter.setPath("/home/bobo/newData/");
-
 	 m_analyticalFileWriter.setSource(&m_valueVectorForAnalyticalFileWriter);
 
 
@@ -41,7 +42,7 @@ void Solver::solve(Limiter * limiter, Stream * stream,
 				   InitialState * initialState)
 {
 m_systemMaker->setStream(stream);
-m_systemSolver->setSystemMaker(m_systemMaker);
+//m_systemSolver->setSystemMaker(m_systemMaker);
 m_systemSolver->setLimiter(limiter);
 
 static std::string dataGeneralDirectoryName;
@@ -76,6 +77,8 @@ m_analyticalFileWriter.setDirectory(analyticalGeneralDirectoryName);
 static int timeSteps;
 timeSteps = m_conditions->getTimeSteps();
 
+// инициализируем origState и newState начальным условием
+//!
 m_origState = initialState->getState();
 m_newState  = initialState->getState();
 
@@ -104,12 +107,15 @@ if (m_systemSolver->getSystemMaker()== nullptr)
 	throw std::range_error("m_systemMaker == nullptr!");
 }
 
-
+// correct
 
 for (int t = 0; t <= timeSteps; t++)
 	{
 		//!!
 		m_valueVectorForFileWriter = m_origState.makeValueVector();
+		// корректное ли передаётся время?
+		// нет ли ошибки с тем, что аналитическое решение считается по одному
+		// времени, а численное - по другому?
 		m_valueVectorForAnalyticalFileWriter =
 				initialState->makeAnalyticalValueVector(t);
 
@@ -126,9 +132,10 @@ for (int t = 0; t <= timeSteps; t++)
 			//Fine write in file
 			//Draw the picture using system and stuff
 		}
+		//!!
 		m_systemSolver->calcNextState(m_origState, m_newState);
-//		m_newState = m_origState * 0.99;
 		m_origState = m_newState;
+		// correct
 	}
 }
 
@@ -137,13 +144,14 @@ void Solver::solveAll(std::vector<Limiter*> & limiters,
 						 std::vector<InitialState*>  & initialStates)
 {
 	{
-		for (int i = 0; i < limiters.size(); i++)
+		for (size_t i = 0; i < limiters.size(); i++)
 			{
-				for (int j = 0; j < streams.size(); i++)
+				for (size_t j = 0; j < streams.size(); j++)
 				{
-					for (int k = 0; k < initialStates.size(); k++)
+					for (size_t k = 0; k < initialStates.size(); k++)
 					{
 						this->solve(limiters[i], streams[j], initialStates[k]);
+						//correct
 					}
 				}
 			}
