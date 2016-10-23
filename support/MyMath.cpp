@@ -37,6 +37,7 @@ double calcAvgValue(const double spatialStep,
 
 	// new version
 		xJ = j * h + h * 0.5;
+	// xJnext and xJrev are border of box number j
 		xJnext = j * h + h;
 		xJprev = j * h;
 
@@ -51,9 +52,12 @@ double calcAvgValue(const double spatialStep,
 	case 1:
 		//!
 		// works just fine, don't touch please
-		return u(0) + (u(1) / (h * h)) *
-		(xJnext * xJnext - xJprev * xJprev) -
-		 (u(1) * 2.0 * xJ / h);
+//		return u(0) + (u(1) / (h * h)) *
+//		(xJnext * xJnext - xJprev * xJprev) -
+//		 (u(1) * 2.0 * xJ / h);
+
+		return u(0) + ((2.0 * u(1) / h) *
+		((xJnext*xJnext - xJprev*xJprev)/2.0 - xJ *(xJnext - xJprev))) / h;
 	}
 	std::range_error("something went wrong in calculating average interval value");
 	return 0;

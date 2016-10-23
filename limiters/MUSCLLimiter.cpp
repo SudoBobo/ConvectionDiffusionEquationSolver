@@ -84,11 +84,14 @@ Polynomial MUSCLLimiter::limit(const Polynomial & uPrev, const Polynomial & u,
 	assert(std::isfinite(c));
 
 	// just like in the article
-	uNew(0) = avgValue - xJ * m(u(1), b, c);
-	uNew(1) = m(u(1), b, c);
+	// oh, well, it was totally wrong
+//	uNew(0) = avgValue - xJ * m(u(1), b, c);
+//	uNew(1) = m(u(1), b, c);
 
-//	uNew(0) = u(0);
-//	uNew(1) = u(1);
+	uNew(0) = u(0);
+	static double uDx;
+	uDx =  u(1) * 2.0 / h;
+	uNew(1) = h * 0.5 * m(uDx, b, c);
 
 	assert(!std::isnan(uNew(0)));
 	assert(!std::isinf(uNew(0)));

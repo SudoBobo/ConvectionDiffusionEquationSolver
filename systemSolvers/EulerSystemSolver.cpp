@@ -163,8 +163,8 @@ Polynomial EulerSystemSolver::uNew(const Polynomial & uPrev, const Polynomial & 
 //		auto testDU = dU(l, uPrev, u, uNext);
 	}
 	// !!!!
-	return uTemp;
-//	return m_limiter->limit(uPrev, uTemp, uNext);
+//	return uTemp;
+	return m_limiter->limit(uPrev, uTemp, uNext);
 }
 
 std::string EulerSystemSolver::getName() const

@@ -41,7 +41,7 @@ int main ()
 	const int spatialSteps = static_cast <int>(std::floor((b - a) / spatialStep));
 
 	const double T = 100;
-	const double courantNumber = 0.5;
+	const double courantNumber = 0.1;
 	//?
 	const double velocityMagnitude = 1.0;
 	const double timeStep  = (courantNumber * spatialStep) / velocityMagnitude;
@@ -85,7 +85,7 @@ int main ()
 
 	std::vector <Stream*> streams;
 //	streams.push_back(&EOstream);
-	streams.push_back(&LFstream);
+//	streams.push_back(&LFstream);
 	streams.push_back(&godunovStream);
 
 
