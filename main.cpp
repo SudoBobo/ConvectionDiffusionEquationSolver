@@ -40,16 +40,16 @@ int main ()
 	const double spatialStep = 1;
 	const int spatialSteps = static_cast <int>(std::floor((b - a) / spatialStep));
 
-	const double T = 1000;
-	const double courantNumber = 0.1;
+	const double T = 100;
+	const double courantNumber = 0.5;
 	//?
 	const double velocityMagnitude = 1.0;
-	const double timeStep  = 1; //(courantNumber * spatialStep) / velocityMagnitude;
+	const double timeStep  = (courantNumber * spatialStep) / velocityMagnitude;
 	const int timeSteps = static_cast <int>(T / timeStep);
 	std::cout << "Full time = " << T << "seconds" << std::endl;
 	std::cout << "TimeStep = " << timeStep << std::endl;
 //fine
-	const int k = 0;
+	const int k = 1;
 
 	Conditions conditions(spatialStep, timeStep, spatialSteps, timeSteps, a, b,
 						  T, k);
@@ -60,26 +60,28 @@ int main ()
 
 	std::string name = "Triangle";
 	///!
+	//! \brief triangleInitialState
+	//!
+	std::vector <InitialState*> initialStates;
+
 	InitialState triangleInitialState(spatialSteps, jSize, k+1, &conditions,
 							  timeToMakeGNUPlots, name, 0.0, 20.0,
 							   u0Triangle);
-	std::vector <InitialState*> initialStates;
 	initialStates.push_back(&triangleInitialState);
 
 
-//	std::string name = "StepDown";
-//	InitialState stepDownInitialState(spatialSteps, 1, k+1, &conditions,
-//							  timeToMakeGNUPlots, name, 0.0, 20.0,
-//							   u0StepDown);
-//	std::vector <InitialState*> initialStates;
-//	initialStates.push_back(&stepDownInitialState);
+	name = "StepDown";
+	InitialState stepDownInitialState(spatialSteps, 1, k+1, &conditions,
+							  timeToMakeGNUPlots, name, 0.0, 20.0,
+							   u0StepDown);
+	initialStates.push_back(&stepDownInitialState);
 
 	//Streams
 	GodunovStream godunovStream(& problem);
 //	std::vector <Stream*> streams;
 
 //	EOStream EOstream (& problem);
-	LFStream LFstream (& problem);
+//	LFStream LFstream (& problem);
 
 	std::vector <Stream*> streams;
 //	streams.push_back(&EOstream);

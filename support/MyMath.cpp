@@ -29,9 +29,16 @@ double calcAvgValue(const double spatialStep,
 	static double h;
 	h = spatialStep;
 
-	xJ = j * h;
-	xJnext = xJ + 0.5 * h;
-	xJprev = xJ - 0.5 * h;
+
+	//	old version, see listochki
+	//	xJ = j * h;
+	//	xJnext = xJ + 0.5 * h;
+	//	xJprev = xJ - 0.5 * h;
+
+	// new version
+		xJ = j * h + h * 0.5;
+		xJnext = j * h + h;
+		xJprev = j * h;
 
 	static int k;
 
@@ -77,9 +84,15 @@ double integral23(const int l, const double spatialStep,
 	static double h;
 	h = spatialStep;
 
-	xJ = j * h;
-	xJnext = xJ + 0.5 * h;
-	xJprev = xJ - 0.5 * h;
+//	old version, see listochki
+//	xJ = j * h;
+//	xJnext = xJ + 0.5 * h;
+//	xJprev = xJ - 0.5 * h;
+
+// new version
+	xJ = j * h + h * 0.5;
+	xJnext = j * h + h;
+	xJprev = j * h;
 
 	static int k;
 	k = u.getOrder();
@@ -231,8 +244,12 @@ int sgn (double val)
 }
 
 
-double AnalyticalTriangle (double lN1, double lN2, double x, double t)
+double AnalyticalTriangle (double lN1, double lN2, double x, double time)
 {
+
+	static double t;
+	t = time;
+
 	assert(!std::isnan   (lN1));
 	assert(!std::isinf   (lN1));
 	assert( std::isfinite(lN1));
@@ -502,7 +519,7 @@ double u0Triangle(double x, int l, double h, double lN1, double lN2)
 			return intervalN1 + intervalN2;
 }
 
-double AnalyticalStep (double lN1, double lN2, double x, double t)
+double AnalyticalStep (double lN1, double lN2, double x, double time)
 {
 
 }

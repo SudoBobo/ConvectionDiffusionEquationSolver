@@ -269,14 +269,17 @@ std::vector <double> State::makeValueVector() const
 			static double h;
 			h = m_conditions->getSpatialStep();
 			// with another division the calculations may be more accurate
-			x = i * h;
+
+			// OH MY
+			// x = i * h;
+			x = i * h + h * 0.5;
 //			value[2 * i]     = m_state[i][0][0];
 //			value[2 * i + 1] = m_state[i][0][0];
 
 			assert(!std::isnan   (x));
 			assert(!std::isinf   (x));
 			assert( std::isfinite(x));
-
+// Lol wut?
 			value[i * 2] = m_state[i][0][0] + m_state[i][0][1] *
 						   (((x + h * 0.25) - (x + h * 0.5)) / h);
 

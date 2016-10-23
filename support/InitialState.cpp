@@ -2,7 +2,7 @@
 #include "MyMath.h"
 #include <iostream>
 double triangle(double x, int l, double h, double lN1, double lN2);
-double AnalyticalStepDown(double lN1, double lN2, double x, int t);
+double AnalyticalStepDown(double lN1, double lN2, double x, double time);
 
 InitialState::InitialState(int iSize, int jSize, int kSize, Conditions * conditions)
 	:State(iSize, jSize, kSize, conditions)
@@ -289,13 +289,24 @@ std::vector <double> InitialState::makeAnalyticalValueVector(int t) const
 
 		static double x;
 		static double newH;
+
+		static double time;
+		time = t * this->getConditions()->getTimeStep();
+
 		newH =  this->getConditions()->getSpatialStep() / this->kSize();
 		for (int i = 0; i < valueGridSize; i++)
 		{
-			x =  i * newH;
-			value[i] = AnalyticalTriangle (0.0, 20.0, x, t);
-//			value[i] = AnalyticalStepDown (0.0, 20.0, x, t);
+//			x =  i * newH;
+			x =  i * newH + newH * 0.5;
 
+			if (m_name == "Triangle")
+			{
+				value[i] = AnalyticalTriangle (0.0, 20.0, x, time);
+			}
+			if (m_name == "StepDown")
+			{
+				value[i] = AnalyticalStepDown (0.0, 20.0, x, time);
+			}
 //			value[i] = AnalyticalSolution (0.0, 20.0, x, t);
 		}
 
@@ -305,9 +316,10 @@ std::vector <double> InitialState::makeAnalyticalValueVector(int t) const
 	return error;
 }
 
-double AnalyticalStepDown(double lN1, double lN2, double x, int t)
+double AnalyticalStepDown(double lN1, double lN2, double x, double time)
 {
-	if ((lN1 <= x) && (x <= (lN1 + 0.5 * t)))
+	// существенно, что t (физическое) = t' (точка на временной сетке) * tau
+	if ((lN1 <= x) && (x <= (lN1 + 0.5 * time)))
 	{
 		return 1.0;
 	}

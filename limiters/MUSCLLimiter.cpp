@@ -40,7 +40,9 @@ Polynomial MUSCLLimiter::limit(const Polynomial & uPrev, const Polynomial & u,
 	static double j;
 	static double xJ;
 	j = u.getJ();
-	xJ = j * h;
+//	xJ = j * h;
+	xJ = j * h + h * 0.5;
+
 	//average  values (see limiters definition in article)
 	static double avgValuePrev;
 	static double avgValue;
