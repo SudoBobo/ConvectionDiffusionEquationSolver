@@ -349,14 +349,15 @@ double InitialState::integralNormUL1() const
 	static double time0 = 0.0;
 	double ATTENTION = twoDimIntegralForNorm
 					   (m_analyticalSolution,
-					   m_lN1, m_lN2, m_conditions->getA(),
-						m_conditions->getB(),
-						time0, m_conditions->getT());
+					   m_lN1, m_lN2, this->getConditions()->getA(),
+						this->getConditions()->getB(),
+						time0, this->getConditions()->getT());
+	std::cout << ATTENTION << std::endl;
 	return twoDimIntegralForNorm
 			(m_analyticalSolution,
-			m_lN1, m_lN2, m_conditions->getA(),
-			 m_conditions->getB(),
-			 time0, m_conditions->getT());
+			m_lN1, m_lN2, this->getConditions()->getA(),
+			 this->getConditions()->getB(),
+			 time0,this->getConditions()->getT());
 }
 double InitialState::integralNormUL2() const
 {

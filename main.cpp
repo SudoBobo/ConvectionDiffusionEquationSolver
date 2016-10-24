@@ -72,7 +72,7 @@ int main ()
 	InitialState triangleInitialState(spatialSteps, jSize, k+1, &conditions,
 							  timeToMakeGNUPlots, name, 0.0, 20.0,
 							   u0Triangle, AnalyticalTriangle);
-	initialStates.push_back(&triangleInitialState);
+//	initialStates.push_back(&triangleInitialState);
 
 
 	name = "StepDown";

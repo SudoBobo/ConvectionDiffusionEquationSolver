@@ -543,6 +543,22 @@ int sgn (double val)
 struct my_f_params
 { double lN1; double lN2;};
 
+double
+gg (double *k, size_t dim, void *p)
+{
+  (void)(dim); /* avoid unused parameter warnings */
+
+	struct my_f_params * fp = (struct my_f_params *)p;
+  if ((fp->lN1 < k[1]) && (k[1] < 0.5 * k[0]))
+		{
+		return 1.0;
+		}
+	  else
+	  {
+		  return 0.0;
+	  }
+  }
+
 double twoDimIntegralForNorm
 (std::function <double(double, double, double, double)> u,
  double lN1, double lN2, double x0, double xMax,
@@ -550,7 +566,8 @@ double twoDimIntegralForNorm
 {
 //gg (double *k, size_t dim, void *p);
 
-		double res, err;
+		double res = 0;
+		double err = 0;
 
 
 		// пределы интегрирования
@@ -565,17 +582,11 @@ double twoDimIntegralForNorm
 		// *k - массив аргументов k[0] = time, k[1] = x
 		// *p - указатель на структуру с параметрами lN1 и lN2
 
-		auto uFunction = [u](double *k, size_t dim, void *p)
-		{
-			return u(static_cast<my_f_params*>(p)->lN1,
-					 static_cast<my_f_params*>(p)->lN2,
-					 k[1], k[0]);
-		};
-
 		const gsl_rng_type *T;
 		gsl_rng *r;
 
-		gsl_monte_function F = { &uFunction, 3, 0};
+		gsl_monte_function F = { uFunction, 3, 0};
+//		gsl_monte_function F = { &gg, 3, 0 };
 		F.params = &params;
 
 		size_t calls = 10000000;

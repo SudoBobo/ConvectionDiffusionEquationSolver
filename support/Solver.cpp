@@ -215,17 +215,17 @@ void Solver::solveAll(std::vector<Limiter*> & limiters,
 }
 
 
-double integralNormUC () const
-{
+//double integralNormUC ()
+//{
 
-}
+//}
 
-double integralNormUL1() const
-{
+//double integralNormUL1()
+//{
 
-}
+//}
 
-double integralNormUL2() const
-{
+//double integralNormUL2()
+//{
 
-}
+//}
