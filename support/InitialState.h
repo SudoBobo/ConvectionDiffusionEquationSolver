@@ -29,6 +29,8 @@ public:
 
 
 private:
+	double m_lN1;
+	double m_lN2;
 	std::vector <int> m_timeMomentsForGNUplotMaker;
 //	std::function <double(double, int, double, double, double)>
 //		   m_analyticalStateMaker;

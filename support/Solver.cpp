@@ -184,8 +184,8 @@ static std::string solutionName;
 solutionName = analyticalGeneralDirectoryName;
 
 // пишем в файл и/или консоль
-writeError(numericalSolutionIntegralNorm, analyticalSolutionIntegralNorm,
-		   solutionName, "integral");
+//writeError(numericalSolutionIntegralNorm, analyticalSolutionIntegralNorm,
+//		   solutionName, "integral");
 
 }
 

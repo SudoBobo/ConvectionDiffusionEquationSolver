@@ -19,6 +19,8 @@ InitialState::InitialState(int iSize, int jSize, int kSize, Conditions * conditi
 	m_analyticalSolution = analyticalSolution;
 	m_timeMomentsForGNUplotMaker = timeMomentsForGNUplotMaker;
 	m_name = name;
+	m_lN1 = lN1;
+	m_lN2 = lN2;
 	for (int i = 0; i < this->iSize(); i++) {
 			  for (int j = 0; j < this->jSize(); j++) {
 					  for (int k = 0; k < this->kSize(); k++) {
@@ -332,3 +334,31 @@ std::vector <double> InitialState::makeAnalyticalValueVector(int t) const
 //}
 
 
+//double twoDimIntegralForNorm
+//(std::function <double(double, double, double, double)> u,
+// double lN1, double lN2, double x0, double xMax,
+// double time0, double timeMax)
+
+
+double InitialState::integralNormUC () const
+{
+	return 0;
+}
+double InitialState::integralNormUL1() const
+{
+	static double time0 = 0.0;
+	double ATTENTION = twoDimIntegralForNorm
+					   (m_analyticalSolution,
+					   m_lN1, m_lN2, m_conditions->getA(),
+						m_conditions->getB(),
+						time0, m_conditions->getT());
+	return twoDimIntegralForNorm
+			(m_analyticalSolution,
+			m_lN1, m_lN2, m_conditions->getA(),
+			 m_conditions->getB(),
+			 time0, m_conditions->getT());
+}
+double InitialState::integralNormUL2() const
+{
+	return 0;
+}

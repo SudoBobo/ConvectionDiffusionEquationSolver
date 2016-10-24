@@ -565,7 +565,7 @@ double twoDimIntegralForNorm
 		// *k - массив аргументов k[0] = time, k[1] = x
 		// *p - указатель на структуру с параметрами lN1 и lN2
 
-		auto uFunction = [](double *k, size_t dim, void *p)
+		auto uFunction = [u](double *k, size_t dim, void *p)
 		{
 			return u(static_cast<my_f_params*>(p)->lN1,
 					 static_cast<my_f_params*>(p)->lN2,
@@ -591,8 +591,8 @@ double twoDimIntegralForNorm
 									 &res, &err);
 		  gsl_monte_plain_free (s);
 
-		  display_results ("plain", res, err);
+//		  display_results ("plain", res, err);
 		}
 		  gsl_rng_free (r);
-
+		return res;
 }
