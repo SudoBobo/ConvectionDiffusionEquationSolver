@@ -2,6 +2,17 @@
 #include <cmath>
 #include <iostream>
 #include <assert.h>
+#include <functional>
+
+#include <stdlib.h>
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_rng.h>
+#include <gsl/gsl_integration.h>
+#include <gsl/gsl_monte.h>
+#include <gsl/gsl_monte_plain.h>
+#include <gsl/gsl_monte_miser.h>
+#include <gsl/gsl_monte_vegas.h>
+
 
 double calcAvgValue(const double spatialStep,
 				 const Polynomial &u)
@@ -248,282 +259,340 @@ int sgn (double val)
 }
 
 
-double AnalyticalTriangle (double lN1, double lN2, double x, double time)
+//double AnalyticalTriangle (double lN1, double lN2, double x, double time)
+//{
+
+//	static double t;
+//	t = time;
+
+//	assert(!std::isnan   (lN1));
+//	assert(!std::isinf   (lN1));
+//	assert( std::isfinite(lN1));
+
+//	assert(!std::isnan   (lN2));
+//	assert(!std::isinf   (lN2));
+//	assert( std::isfinite(lN2));
+
+//	assert(!std::isnan   (x));
+//	assert(!std::isinf   (x));
+//	assert( std::isfinite(x));
+
+//	assert(!std::isnan   (t));
+//	assert(!std::isinf   (t));
+//	assert( std::isfinite(t));
+
+//		if (t == 0)
+//		{
+//				if ((lN1 <= x) && (x <= (0.5 * (lN1 + lN2))))
+//						return (2 * (x - lN1)) / (lN2 - lN1 + 2.0);
+
+//				if (((0.5 * (lN1 + lN2)) < x) && ( x <= lN2))
+//						return (2 * (lN2 - x)) / (lN2 - lN1 - 2.0);
+
+//				if (!((lN1 <= x) && (x <= lN2)))
+//						return 0.0;
+
+//		}
+
+//		if (( 0.0 < t) && (t <= (0.5 * (lN2 - lN1))))
+//		{
+//				if ((lN1 <= x) && (x <= (0.5 * (lN1 + lN2) + t)))
+//						return (2 * (x - lN1)) / (lN2 - lN1 + 2.0 * t);
+
+//				if (((0.5 * (lN1 + lN2) + t) < x) && ( x <= lN2))
+//						return (2 * (lN2 - x)) / (lN2 - lN1 - 2.0 * t);
+
+//				if (!((lN1 <= x) && (x <= lN2)))
+//						return 0.0;
+//		}
+
+//		if (( 0.5 * (lN2 - lN1)) < t)
+//		{
+//				if ((lN1 <= x) && (x <= sqrt(0.5 * (lN2 - lN1) * (lN2 - lN1 + 2.0 * t))))
+//						return ((2.0 * (x - lN1))/(lN2 - lN1 + 2.0 * t));
+//				return 0.0;
+//		}
+//		//throw std::range_error("triangle error");
+//}
+
+//double u0Triangle(double x, int l, double h, double lN1, double lN2)
+//{
+//	if (lN1 == 0.0)
+//	{
+
+//	}
+//	else
+//	{
+//		assert(!std::isnan   (lN1));
+//		assert(!std::isinf   (lN1));
+//		assert( std::isfinite(lN1));
+//	}
+
+//	assert(!std::isnan   (lN2));
+//	assert(!std::isinf   (lN2));
+//	assert( std::isfinite(lN2));
+
+//	if (x == 0)
+//	{
+
+//	}
+//	else
+//	{
+//		assert(!std::isnan   (x));
+//		assert(!std::isinf   (x));
+//		assert( std::isfinite(x));
+//	}
+
+
+//	if (l == 0)
+//	{
+
+//	}
+//	else
+//	{
+//		assert(!std::isnan   (l));
+//		assert(!std::isinf   (l));
+//		assert( std::isfinite(l));
+//		assert((0 <= l) && (l <= 20));
+//	}
+
+//	assert(!std::isnan   (h));
+//	assert(!std::isinf   (h));
+//	assert( std::isfinite(h));
+
+//		static double intervalN1;
+//		static double intervalN2;
+
+//		intervalN1 = 0.0;
+//		intervalN2 = 0.0;
+
+//		static double middle = 0.5 * (lN2 +lN1);
+
+//		static double xPrev;
+//		static double xNext;
+
+//		xPrev = x - h * 0.5;
+//		xNext = x + h * 0.5;
+//		assert((l == 0) || (l == 1));
+//		switch (l)
+//		{
+//		case 0:
+
+//				if ((lN1 <= xPrev) && (xNext <= middle))
+//				{
+////						intervalN1 = ((2.0) / (h * (lN2 - lN1))) *
+////												 (
+////												 xNext * (xNext / 2.0 - lN1) -
+////												 xPrev * (xPrev / 2.0 - lN1)
+////												 );
+
+//						intervalN1 =			 (
+//												 xNext * (xNext - 2.0 * lN1) -
+//												 xPrev * (xPrev - 2.0 *  lN1)
+//												 ) / (h * (lN2 - lN1));
+//						intervalN2 = 0.0;
+//				return intervalN1;
+//				break;
+//				}
+
+
+//				if ((xPrev <= middle ) && (middle < xNext))
+//				{
+//						intervalN1 =			 (
+//												 middle * (middle - 2.0 * lN1) -
+//												 xPrev * (xPrev - 2.0 *  lN1)
+//												 ) / (h * (lN2 - lN1));
+
+//						intervalN2 = 			 (
+//												 xNext * (2.0 * lN2 - xNext) -
+//												 middle * (2.0 * lN2 - middle)
+//												 )  / (h * (lN2 - lN1));
+//						return intervalN1 + intervalN2;
+//						break;
+//				}
+
+//				if ((middle < xPrev) && (xNext <= lN2))
+//				{
+//						intervalN1 = 0.0;
+
+//						intervalN2 = 			 (
+//												 xNext * (2.0 * lN2 - xNext) -
+//												 xPrev * (2.0 * lN2 - xPrev)
+//												 )  / (h * (lN2 - lN1));
+//						return intervalN2;
+
+//						break;
+//				}
+
+//				if ((xPrev <= lN2) && (lN2 < xNext))
+//				{
+//						intervalN1 = 0.0;
+//						intervalN2 = 			 (
+//												 lN2 * (2.0 * lN2 - lN2) -
+//												 xPrev * (2.0 * lN2 - xPrev)
+//												 )  / (h * (lN2 - lN1));
+//						return intervalN2;
+
+//						break;
+//				}
+
+//				if (lN2 < xPrev)
+//				{
+//						intervalN1 = 0.0;
+//						intervalN2 = 0.0;
+//						return 0.0;
+//						break;
+//				}
+
+//		case 1:
+//				if ((lN1 <= xPrev) && (xNext <= middle))
+//				{
+//						intervalN1 = (
+//						4.0 * (xNext * xNext * xNext - xPrev * xPrev * xPrev) -
+//						6.0 * x * (xNext * xNext - xPrev * xPrev) -
+//						6.0 * lN1 * (xNext * xNext - xPrev * xPrev) +
+//						12.0 * x * lN1 * (xNext - xPrev)
+//									 ) / (h * h * (lN2 - lN1));
+//						intervalN2 = 0.0;
+//						return intervalN1;
+//				break;
+//				}
+
+//				if ((xPrev <= middle) && (middle < xNext))
+//				{
+//					intervalN1 = (
+//					4.0 * (middle * middle * middle - xPrev * xPrev * xPrev) -
+//					6.0 * x * (middle * middle - xPrev * xPrev) -
+//					6.0 * lN1 * (middle * middle - xPrev * xPrev) +
+//					12.0 * x * lN1 * (middle - xPrev)
+//								 ) / (h * h * (lN2 - lN1));
+
+//					intervalN2 = (
+//					 -4.0 * (xNext * xNext * xNext - middle * middle * middle) +
+//					 6.0 * x * (xNext * xNext - middle * middle) +
+//					 6.0 * lN2 * (xNext * xNext - middle * middle) -
+//					 12.0 * x * lN2 * (xNext - middle)
+//								  ) / (h * h * (lN2 - lN1));
+
+//					return intervalN1 + intervalN2;
+//						break;
+//				}
+
+//				if ((middle <= xPrev) && (xNext <= lN2))
+//				{
+//						intervalN1 = 0.0;
+//						intervalN2 = (
+//						 -4.0 * (xNext * xNext * xNext - xPrev * xPrev * xPrev) +
+//						 6.0 * x * (xNext * xNext - xPrev * xPrev) +
+//						 6.0 * lN2 * (xNext * xNext - xPrev * xPrev) -
+//						 12.0 * x * lN2 * (xNext - xPrev)
+//									  ) / (h * h * (lN2 - lN1));
+//						return intervalN2;
+//						break;
+//				}
+
+//				if ((xPrev <= lN2) && (lN2 < xNext))
+//				{
+//						intervalN1 = 0.0;
+//						intervalN2 = (
+//						 -4.0 * (lN2 * lN2 * lN2 - xPrev * xPrev * xPrev) +
+//						 6.0 * x * (lN2 * lN2 - xPrev * xPrev) +
+//						 6.0 * lN2 * (lN2 * lN2 - xPrev * xPrev) -
+//						 12.0 * x * lN2 * (lN2 - xPrev)
+//									  ) / (h * h * (lN2 - lN1));
+//						return intervalN2;
+//						break;
+//				}
+
+//				if (lN2 < xPrev)
+//				{
+//						intervalN1 = 0.0;
+//						intervalN2 = 0.0;
+//						return 0.0;
+//						break;
+//				}
+//		}
+
+//		if (intervalN1 != 0)
+//		{
+//			assert(!std::isnan   (intervalN1));
+//			assert(!std::isinf   (intervalN1));
+//			assert( std::isfinite(intervalN1));
+//		}
+
+//		if (intervalN2 != 0)
+//		{
+//			assert(!std::isnan   (intervalN2));
+//			assert(!std::isinf   (intervalN2));
+//			assert( std::isfinite(intervalN2));
+//		}
+//		if (intervalN2 == 0)
+//				return intervalN1;
+//		if (intervalN1 == 0)
+//				return intervalN2;
+//		else
+//			return intervalN1 + intervalN2;
+//}
+
+//double AnalyticalStep (double lN1, double lN2, double x, double time)
+//{
+
+//}
+
+
+struct my_f_params
+{ double lN1; double lN2;};
+
+double twoDimIntegralForNorm
+(std::function <double(double, double, double, double)> u,
+ double lN1, double lN2, double x0, double xMax,
+ double time0, double timeMax)
 {
+//gg (double *k, size_t dim, void *p);
 
-	static double t;
-	t = time;
+		double res, err;
 
-	assert(!std::isnan   (lN1));
-	assert(!std::isinf   (lN1));
-	assert( std::isfinite(lN1));
 
-	assert(!std::isnan   (lN2));
-	assert(!std::isinf   (lN2));
-	assert( std::isfinite(lN2));
+		// пределы интегрирования
+		// попробуй переставить местами интегралы, если будет ошибка
+		double xl[3] = { time0,   x0,   0};
+		double xu[3] = { timeMax, xMax, 1};
+		struct my_f_params params = {lN1, lN2};
 
-	assert(!std::isnan   (x));
-	assert(!std::isinf   (x));
-	assert( std::isfinite(x));
+		// теперь нужно сделать uFunction
+		// uFunction (double *k, size_t dim, void *p)
 
-	assert(!std::isnan   (t));
-	assert(!std::isinf   (t));
-	assert( std::isfinite(t));
+		// *k - массив аргументов k[0] = time, k[1] = x
+		// *p - указатель на структуру с параметрами lN1 и lN2
 
-		if (t == 0)
+		auto uFunction = [](double *k, size_t dim, void *p)
 		{
-				if ((lN1 <= x) && (x <= (0.5 * (lN1 + lN2))))
-						return (2 * (x - lN1)) / (lN2 - lN1 + 2.0);
+			return u(static_cast<my_f_params*>(p)->lN1,
+					 static_cast<my_f_params*>(p)->lN2,
+					 k[1], k[0]);
+		};
 
-				if (((0.5 * (lN1 + lN2)) < x) && ( x <= lN2))
-						return (2 * (lN2 - x)) / (lN2 - lN1 - 2.0);
+		const gsl_rng_type *T;
+		gsl_rng *r;
 
-				if (!((lN1 <= x) && (x <= lN2)))
-						return 0.0;
+		gsl_monte_function F = { &uFunction, 3, 0};
+		F.params = &params;
 
-		}
+		size_t calls = 10000000;
 
-		if (( 0.0 < t) && (t <= (0.5 * (lN2 - lN1))))
+		gsl_rng_env_setup ();
+
+		T = gsl_rng_default;
+		r = gsl_rng_alloc (T);
+
 		{
-				if ((lN1 <= x) && (x <= (0.5 * (lN1 + lN2) + t)))
-						return (2 * (x - lN1)) / (lN2 - lN1 + 2.0 * t);
+		  gsl_monte_plain_state *s = gsl_monte_plain_alloc (3);
+		  gsl_monte_plain_integrate (&F, xl, xu, 3, calls, r, s,
+									 &res, &err);
+		  gsl_monte_plain_free (s);
 
-				if (((0.5 * (lN1 + lN2) + t) < x) && ( x <= lN2))
-						return (2 * (lN2 - x)) / (lN2 - lN1 - 2.0 * t);
-
-				if (!((lN1 <= x) && (x <= lN2)))
-						return 0.0;
+		  display_results ("plain", res, err);
 		}
-
-		if (( 0.5 * (lN2 - lN1)) < t)
-		{
-				if ((lN1 <= x) && (x <= sqrt(0.5 * (lN2 - lN1) * (lN2 - lN1 + 2.0 * t))))
-						return ((2.0 * (x - lN1))/(lN2 - lN1 + 2.0 * t));
-				return 0.0;
-		}
-		//throw std::range_error("triangle error");
-}
-
-double u0Triangle(double x, int l, double h, double lN1, double lN2)
-{
-	if (lN1 == 0.0)
-	{
-
-	}
-	else
-	{
-		assert(!std::isnan   (lN1));
-		assert(!std::isinf   (lN1));
-		assert( std::isfinite(lN1));
-	}
-
-	assert(!std::isnan   (lN2));
-	assert(!std::isinf   (lN2));
-	assert( std::isfinite(lN2));
-
-	if (x == 0)
-	{
-
-	}
-	else
-	{
-		assert(!std::isnan   (x));
-		assert(!std::isinf   (x));
-		assert( std::isfinite(x));
-	}
-
-
-	if (l == 0)
-	{
-
-	}
-	else
-	{
-		assert(!std::isnan   (l));
-		assert(!std::isinf   (l));
-		assert( std::isfinite(l));
-		assert((0 <= l) && (l <= 20));
-	}
-
-	assert(!std::isnan   (h));
-	assert(!std::isinf   (h));
-	assert( std::isfinite(h));
-
-		static double intervalN1;
-		static double intervalN2;
-
-		intervalN1 = 0.0;
-		intervalN2 = 0.0;
-
-		static double middle = 0.5 * (lN2 +lN1);
-
-		static double xPrev;
-		static double xNext;
-
-		xPrev = x - h * 0.5;
-		xNext = x + h * 0.5;
-		assert((l == 0) || (l == 1));
-		switch (l)
-		{
-		case 0:
-
-				if ((lN1 <= xPrev) && (xNext <= middle))
-				{
-//						intervalN1 = ((2.0) / (h * (lN2 - lN1))) *
-//												 (
-//												 xNext * (xNext / 2.0 - lN1) -
-//												 xPrev * (xPrev / 2.0 - lN1)
-//												 );
-
-						intervalN1 =			 (
-												 xNext * (xNext - 2.0 * lN1) -
-												 xPrev * (xPrev - 2.0 *  lN1)
-												 ) / (h * (lN2 - lN1));
-						intervalN2 = 0.0;
-				return intervalN1;
-				break;
-				}
-
-
-				if ((xPrev <= middle ) && (middle < xNext))
-				{
-						intervalN1 =			 (
-												 middle * (middle - 2.0 * lN1) -
-												 xPrev * (xPrev - 2.0 *  lN1)
-												 ) / (h * (lN2 - lN1));
-
-						intervalN2 = 			 (
-												 xNext * (2.0 * lN2 - xNext) -
-												 middle * (2.0 * lN2 - middle)
-												 )  / (h * (lN2 - lN1));
-						return intervalN1 + intervalN2;
-						break;
-				}
-
-				if ((middle < xPrev) && (xNext <= lN2))
-				{
-						intervalN1 = 0.0;
-
-						intervalN2 = 			 (
-												 xNext * (2.0 * lN2 - xNext) -
-												 xPrev * (2.0 * lN2 - xPrev)
-												 )  / (h * (lN2 - lN1));
-						return intervalN2;
-
-						break;
-				}
-
-				if ((xPrev <= lN2) && (lN2 < xNext))
-				{
-						intervalN1 = 0.0;
-						intervalN2 = 			 (
-												 lN2 * (2.0 * lN2 - lN2) -
-												 xPrev * (2.0 * lN2 - xPrev)
-												 )  / (h * (lN2 - lN1));
-						return intervalN2;
-
-						break;
-				}
-
-				if (lN2 < xPrev)
-				{
-						intervalN1 = 0.0;
-						intervalN2 = 0.0;
-						return 0.0;
-						break;
-				}
-
-		case 1:
-				if ((lN1 <= xPrev) && (xNext <= middle))
-				{
-						intervalN1 = (
-						4.0 * (xNext * xNext * xNext - xPrev * xPrev * xPrev) -
-						6.0 * x * (xNext * xNext - xPrev * xPrev) -
-						6.0 * lN1 * (xNext * xNext - xPrev * xPrev) +
-						12.0 * x * lN1 * (xNext - xPrev)
-									 ) / (h * h * (lN2 - lN1));
-						intervalN2 = 0.0;
-						return intervalN1;
-				break;
-				}
-
-				if ((xPrev <= middle) && (middle < xNext))
-				{
-					intervalN1 = (
-					4.0 * (middle * middle * middle - xPrev * xPrev * xPrev) -
-					6.0 * x * (middle * middle - xPrev * xPrev) -
-					6.0 * lN1 * (middle * middle - xPrev * xPrev) +
-					12.0 * x * lN1 * (middle - xPrev)
-								 ) / (h * h * (lN2 - lN1));
-
-					intervalN2 = (
-					 -4.0 * (xNext * xNext * xNext - middle * middle * middle) +
-					 6.0 * x * (xNext * xNext - middle * middle) +
-					 6.0 * lN2 * (xNext * xNext - middle * middle) -
-					 12.0 * x * lN2 * (xNext - middle)
-								  ) / (h * h * (lN2 - lN1));
-
-					return intervalN1 + intervalN2;
-						break;
-				}
-
-				if ((middle <= xPrev) && (xNext <= lN2))
-				{
-						intervalN1 = 0.0;
-						intervalN2 = (
-						 -4.0 * (xNext * xNext * xNext - xPrev * xPrev * xPrev) +
-						 6.0 * x * (xNext * xNext - xPrev * xPrev) +
-						 6.0 * lN2 * (xNext * xNext - xPrev * xPrev) -
-						 12.0 * x * lN2 * (xNext - xPrev)
-									  ) / (h * h * (lN2 - lN1));
-						return intervalN2;
-						break;
-				}
-
-				if ((xPrev <= lN2) && (lN2 < xNext))
-				{
-						intervalN1 = 0.0;
-						intervalN2 = (
-						 -4.0 * (lN2 * lN2 * lN2 - xPrev * xPrev * xPrev) +
-						 6.0 * x * (lN2 * lN2 - xPrev * xPrev) +
-						 6.0 * lN2 * (lN2 * lN2 - xPrev * xPrev) -
-						 12.0 * x * lN2 * (lN2 - xPrev)
-									  ) / (h * h * (lN2 - lN1));
-						return intervalN2;
-						break;
-				}
-
-				if (lN2 < xPrev)
-				{
-						intervalN1 = 0.0;
-						intervalN2 = 0.0;
-						return 0.0;
-						break;
-				}
-		}
-
-		if (intervalN1 != 0)
-		{
-			assert(!std::isnan   (intervalN1));
-			assert(!std::isinf   (intervalN1));
-			assert( std::isfinite(intervalN1));
-		}
-
-		if (intervalN2 != 0)
-		{
-			assert(!std::isnan   (intervalN2));
-			assert(!std::isinf   (intervalN2));
-			assert( std::isfinite(intervalN2));
-		}
-		if (intervalN2 == 0)
-				return intervalN1;
-		if (intervalN1 == 0)
-				return intervalN2;
-		else
-			return intervalN1 + intervalN2;
-}
-
-double AnalyticalStep (double lN1, double lN2, double x, double time)
-{
+		  gsl_rng_free (r);
 
 }

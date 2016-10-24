@@ -108,9 +108,28 @@ if (m_systemSolver->getSystemMaker()== nullptr)
 }
 
 // correct
+static double sumForNorm;
+// максимальное значение среди всех промежутков Ij
+static double maxUForNorm;
+maxUForNorm = 0.0;
+static double tempMax;
+
 
 for (int t = 0; t <= timeSteps; t++)
 	{
+
+		tempMax = m_origState.UMax();
+		if (maxUForNorm < tempMax)
+		{
+			maxUForNorm = tempMax;
+		}
+		else
+		{
+
+		}
+
+		sumForNorm += m_origState.sum();
+
 		//!!
 		m_valueVectorForFileWriter = m_origState.makeValueVector();
 		// корректное ли передаётся время?
@@ -137,6 +156,37 @@ for (int t = 0; t <= timeSteps; t++)
 		m_origState = m_newState;
 		// correct
 	}
+// count mistake
+// write in file
+
+// 0 - uC, 1 - uL1, 2 -uL2
+static std::vector <double> numericalSolutionIntegralNorm(3);
+static std::vector <double> analyticalSolutionIntegralNorm(3);
+
+
+numericalSolutionIntegralNorm[1] = maxUForNorm;
+analyticalSolutionIntegralNorm[1] = initialState->integralNormUC();
+
+numericalSolutionIntegralNorm[2] = m_conditions->getSpatialStep() *
+								 m_conditions->getTimeStep() *
+								 sumForNorm;
+analyticalSolutionIntegralNorm[2] =initialState->integralNormUL1();
+
+numericalSolutionIntegralNorm[3] =
+		std::sqrt(m_conditions->getSpatialStep() *
+				  m_conditions->getTimeStep() *
+				  sumForNorm * sumForNorm);
+
+analyticalSolutionIntegralNorm[3] = initialState->integralNormUL2();
+
+
+static std::string solutionName;
+solutionName = analyticalGeneralDirectoryName;
+
+// пишем в файл и/или консоль
+writeError(numericalSolutionIntegralNorm, analyticalSolutionIntegralNorm,
+		   solutionName, "integral");
+
 }
 
 void Solver::solveAll(std::vector<Limiter*> & limiters,
@@ -162,6 +212,20 @@ void Solver::solveAll(std::vector<Limiter*> & limiters,
 	// create temp states
 	// calc solution
 	// write there
+}
 
+
+double integralNormUC () const
+{
+
+}
+
+double integralNormUL1() const
+{
+
+}
+
+double integralNormUL2() const
+{
 
 }

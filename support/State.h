@@ -39,6 +39,8 @@ public:
 
 	int spatialOrder() const;
 	Conditions * getConditions() const;
+	double UMax() const;
+	double sum() const;
 
 private:
 	int        m_iSize, m_jSize, m_kSize;

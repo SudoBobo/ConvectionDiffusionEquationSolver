@@ -324,3 +324,95 @@ bool State::operator ==(const State & anotherState)
 			&& (m_kSize == anotherState.kSize())) &&
 			(m_conditions == anotherState.getConditions()));
 }
+
+double State::sum() const
+{
+	assert(m_jSize == 1);
+
+	static double sum;
+	sum = 0.0;
+
+	if (m_kSize == 1)
+	{
+		for (int i = 0; i < m_iSize; i++)
+		{
+			sum += m_state[i][1][0];
+		}
+	return sum;
+	}
+
+	static double xJ;
+	static double xJprev;
+	static double xJnext;
+	static double h = m_conditions->getSpatialStep();
+
+	if (m_kSize == 2)
+	{
+		for (int i = 0; i < m_iSize; i++)
+		{
+			xJ = i * h + h * 0.5;
+			xJnext = i * h + h;
+			xJprev = i * h;
+
+			sum +=  m_state[i][0][0] +
+			((2.0 * m_state[i][0][1] / h) *
+			((xJnext*xJnext - xJprev*xJprev)/2.0 - xJ *(xJnext - xJprev))) / h;
+		}
+	return sum;
+	}
+
+	if (2 < m_kSize)
+	{
+		throw std::range_error("No sum function for k > 2");
+	}
+}
+
+double State::UMax() const
+{
+	static double UMax;
+	UMax = 0.0;
+
+	if (m_kSize == 1)
+	{
+		for (int i = 0; i < m_iSize; i++)
+		{
+			if (UMax < m_state[i][0][0])
+			{
+				UMax = m_state[i][0][0];
+			}
+		}
+	return UMax;
+	}
+
+	static double xJ;
+	static double xJprev;
+	static double xJnext;
+	static double uValue;
+	uValue = 0.0;
+	static double h = m_conditions->getSpatialStep();
+
+	if (m_kSize == 2)
+	{
+		for (int i = 0; i < m_iSize; i++)
+		{
+			xJ = i * h + h * 0.5;
+			xJnext = i * h + h;
+			xJprev = i * h;
+
+			uValue =  m_state[i][0][0] +
+			((2.0 * m_state[i][0][1] / h) *
+			((xJnext*xJnext - xJprev*xJprev)/2.0 - xJ *(xJnext - xJprev))) / h;
+
+			if(UMax < uValue)
+			{
+				UMax = uValue;
+			}
+		}
+	return UMax;
+	}
+
+	if (2 < m_kSize)
+	{
+		throw std::range_error("No UMax function for k > 2");
+	}
+}

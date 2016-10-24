@@ -3,6 +3,9 @@ CONFIG += console c++11
 CONFIG -= app_bundle
 CONFIG -= qt
 
+unix: CONFIG += link_pkgconfig
+unix: PKGCONFIG += gsl
+
 SOURCES += main.cpp \
     limiters/Limiter.cpp \
     limiters/LimiterN2.cpp \
