@@ -22,7 +22,7 @@ Solver::Solver(SystemMaker * systemMaker, SystemSolver * systemSolver,
 	m_numericalFileWriter.setGeneralHeaderName("file");
 	m_numericalFileWriter.setPath("/home/bobo/newData/");
 	m_numericalFileWriter.setSource(&m_valueVectorForFileWriter);
-
+	m_numericalFileWriter.clean();
 
 	 m_analyticalFileWriter.setPrecision(6);
 	 m_analyticalFileWriter.setGridSize(newGridSize);
@@ -30,7 +30,7 @@ Solver::Solver(SystemMaker * systemMaker, SystemSolver * systemSolver,
 	 m_analyticalFileWriter.setGeneralHeaderName("file");
 	 m_analyticalFileWriter.setPath("/home/bobo/newData/");
 	 m_analyticalFileWriter.setSource(&m_valueVectorForAnalyticalFileWriter);
-
+	 m_analyticalFileWriter.clean();
 
 
 	//	FileWriter m_analyticalFileWriter;

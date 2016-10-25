@@ -43,6 +43,11 @@ double u0Triangle(double x, int l, double h, double lN1, double lN2);
 double AnalyticalTriangle (double lN1, double lN2, double x, double time);
 double AnalyticalTriangleIntegrand(double * variables, size_t dim, void * params);
 
+
+double u0LeftTriangle(double x, int l, double h, double lN1, double lN2);
+double AnalyticalLeftTriangle (double lN1, double lN2, double x, double time);
+double AnalyticalLeftTriangleIntegrand(double * variables, size_t dim, void * params);
+
 //double
 //gg (double *k, size_t dim, void *p)
 //{
@@ -81,7 +86,7 @@ int main ()
 	std::cout << "Full time = " << T << "seconds" << std::endl;
 	std::cout << "TimeStep = " << timeStep << std::endl;
 //fine
-	const int k = 0;
+	const int k = 1;
 
 	Conditions conditions(spatialStep, timeStep, spatialSteps, timeSteps, a, b,
 						  T, k, courantNumber);
@@ -91,9 +96,6 @@ int main ()
 	const int jSize = 1;
 
 	std::string name = "Triangle";
-	///!
-	//! \brief triangleInitialState
-	//!
 	std::vector <InitialState*> initialStates;
 
 	InitialState triangleInitialState(spatialSteps, jSize, k+1, &conditions,
@@ -109,6 +111,13 @@ int main ()
 							   u0StepDown, AnalyticalStepDown,
 									  &AnalyticalStepDownIntegrand);
 	initialStates.push_back(&stepDownInitialState);
+
+	name = "LeftTriangle";
+	InitialState leftTriangleInitialState(spatialSteps, 1, k+1, &conditions,
+							  timeToMakeGNUPlots, name, 0.0, 20.0,
+							   u0LeftTriangle, AnalyticalLeftTriangle,
+									  &AnalyticalLeftTriangleIntegrand);
+	initialStates.push_back(&leftTriangleInitialState);
 
 	//Streams
 	GodunovStream godunovStream(& problem);
@@ -638,3 +647,36 @@ double AnalyticalTriangleIntegrand(double * variables, size_t dim, void * params
 			//throw std::range_error("triangle error");
 	}
 
+
+double u0LeftTriangle(double x, int l, double h, double lN1, double lN2)
+{
+	static double xPrev;
+	static double xNext;
+
+	xPrev = x - h * 0.5;
+	xNext = x + h * 0.5;
+
+	switch (l)
+	{
+	case 0:
+		if ((lN1 < x) && (x < lN2))
+		{
+			return (xJnext * xJnext - xJprev * xJprev) / (2 * lN2);
+		}
+		else
+		{
+			return 0.0;
+		}
+	case 1:
+		if ((lN1 < x) && (x < lN2))
+		{
+
+		}
+		else
+		{
+			return 0.0;
+		}
+}
+
+double AnalyticalLeftTriangle (double lN1, double lN2, double x, double time);
+double AnalyticalLeftTriangleIntegrand(double * variables, size_t dim, void * params);
