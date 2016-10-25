@@ -16,7 +16,10 @@ public:
 		  std::function <double(double, int, double, double, double)>
 				 initialStateMaker,
 		  std::function <double(double, double, double, double)>
-				 analyticalSolution);
+				 analyticalSolution,
+				 double(* analyticalSolutionIntegrand)(double *, size_t, void *));
+//		  std::function <double(double *, size_t, void *)>
+//				 analyticalSolutionIntegrand);
 
 	std::string getName() const;
 	const std::vector <int> & getTimeMoments() const;
@@ -35,6 +38,8 @@ private:
 //	std::function <double(double, int, double, double, double)>
 //		   m_analyticalStateMaker;
 	std::function <double(double, double, double, double)> m_analyticalSolution;
+//	std::function <double(double *, size_t, void *)> m_analyticalSolutionIntegrand;
+	double(* m_analyticalSolutionIntegrand)(double *, size_t, void *);
 	std::string m_name;
 };
 

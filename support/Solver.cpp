@@ -56,7 +56,7 @@ dataGeneralDirectoryName = m_systemMaker->getName() + m_systemSolver->getName() 
 
 
 static std::string command;
-command = "mkdir " + m_numericalFileWriter.getPath() + dataGeneralDirectoryName;
+command = std::string("mkdir ") + m_numericalFileWriter.getPath() + dataGeneralDirectoryName;
 std::system(command.c_str());
 
 m_numericalFileWriter.setDirectory(dataGeneralDirectoryName);

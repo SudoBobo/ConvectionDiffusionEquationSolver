@@ -543,24 +543,8 @@ int sgn (double val)
 struct my_f_params
 { double lN1; double lN2;};
 
-double
-gg (double *k, size_t dim, void *p)
-{
-  (void)(dim); /* avoid unused parameter warnings */
-
-	struct my_f_params * fp = (struct my_f_params *)p;
-  if ((fp->lN1 < k[1]) && (k[1] < 0.5 * k[0]))
-		{
-		return 1.0;
-		}
-	  else
-	  {
-		  return 0.0;
-	  }
-  }
-
 double twoDimIntegralForNorm
-(std::function <double(double, double, double, double)> u,
+(double(* u)(double *, size_t, void *),
  double lN1, double lN2, double x0, double xMax,
  double time0, double timeMax)
 {
@@ -568,13 +552,12 @@ double twoDimIntegralForNorm
 
 		double res = 0;
 		double err = 0;
-
-
 		// пределы интегрирования
 		// попробуй переставить местами интегралы, если будет ошибка
 		double xl[3] = { time0,   x0,   0};
 		double xu[3] = { timeMax, xMax, 1};
 		struct my_f_params params = {lN1, lN2};
+
 
 		// теперь нужно сделать uFunction
 		// uFunction (double *k, size_t dim, void *p)
@@ -585,7 +568,7 @@ double twoDimIntegralForNorm
 		const gsl_rng_type *T;
 		gsl_rng *r;
 
-		gsl_monte_function F = { uFunction, 3, 0};
+		gsl_monte_function F = {u , 3, 0};
 //		gsl_monte_function F = { &gg, 3, 0 };
 		F.params = &params;
 

@@ -15,7 +15,7 @@ double integral23(const int l, const double spatialStep,
 //double AnalyticalTriangle (double lN1, double lN2, double x, double time);
 
 double twoDimIntegralForNorm
-(std::function <double(double, double, double, double)> u,
+(double(* u) (double *, size_t, void *),
  double lN1, double lN2, double x0, double xMax,
  double time0, double timeMax);
 

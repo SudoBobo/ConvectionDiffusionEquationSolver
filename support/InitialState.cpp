@@ -13,10 +13,13 @@ InitialState::InitialState(int iSize, int jSize, int kSize, Conditions * conditi
 InitialState::InitialState(int iSize, int jSize, int kSize, Conditions * conditions,
 	  std::vector <int> timeMomentsForGNUplotMaker, std::string name, double lN1, double lN2,
 	  std::function <double(double, int, double, double, double)>
-						   initialStateMaker, std::function <double (double, double, double, double)> analyticalSolution)
+						   initialStateMaker, std::function <double (double, double, double, double)> analyticalSolution,
+						   double(* analyticalSolutionIntegrand)(double *, size_t, void *))
 	:InitialState(iSize, jSize, kSize, conditions)
 {
 	m_analyticalSolution = analyticalSolution;
+	m_analyticalSolutionIntegrand = analyticalSolutionIntegrand;
+
 	m_timeMomentsForGNUplotMaker = timeMomentsForGNUplotMaker;
 	m_name = name;
 	m_lN1 = lN1;
@@ -344,21 +347,23 @@ double InitialState::integralNormUC () const
 {
 	return 0;
 }
+
 double InitialState::integralNormUL1() const
 {
 	static double time0 = 0.0;
 	double ATTENTION = twoDimIntegralForNorm
-					   (m_analyticalSolution,
+					   (m_analyticalSolutionIntegrand,
 					   m_lN1, m_lN2, this->getConditions()->getA(),
 						this->getConditions()->getB(),
 						time0, this->getConditions()->getT());
 	std::cout << ATTENTION << std::endl;
 	return twoDimIntegralForNorm
-			(m_analyticalSolution,
-			m_lN1, m_lN2, this->getConditions()->getA(),
+			(m_analyticalSolutionIntegrand,
+			 m_lN1, m_lN2, this->getConditions()->getA(),
 			 this->getConditions()->getB(),
 			 time0,this->getConditions()->getT());
 }
+
 double InitialState::integralNormUL2() const
 {
 	return 0;

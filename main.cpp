@@ -30,10 +30,37 @@
 #include "systemSolvers/EulerSystemSolver.h"
 
 #include "support/MyMath.h"
+
+
+struct my_f_params
+{ double lN1; double lN2;};
+
 double u0StepDown (double x, double l, double h, double lN1, double lN2);
 double AnalyticalStepDown(double lN1, double lN2, double x, double time);
+double AnalyticalStepDownIntegrand(double * variables, size_t dim, void * params);
+
 double u0Triangle(double x, int l, double h, double lN1, double lN2);
 double AnalyticalTriangle (double lN1, double lN2, double x, double time);
+double AnalyticalTriangleIntegrand(double * variables, size_t dim, void * params);
+
+//double
+//gg (double *k, size_t dim, void *p)
+//{
+//  (void)(dim); /* avoid unused parameter warnings */
+
+//	struct my_f_params * fp = (struct my_f_params *)p;
+//  if ((fp->lN1 < k[1]) && (k[1] < 0.5 * k[0]))
+//		{
+//		return 1.0;
+//		}
+//	  else
+//	  {
+//		  return 0.0;
+//	  }
+//  }
+
+
+
 
 int main ()
 {
@@ -42,7 +69,7 @@ int main ()
 
 	const double a = 0.0;
 	const double b = 520.0;
-	const double spatialStep = 0.5;
+	const double spatialStep = 1;
 	const int spatialSteps = static_cast <int>(std::floor((b - a) / spatialStep));
 
 	const double T = 100;
@@ -71,14 +98,16 @@ int main ()
 
 	InitialState triangleInitialState(spatialSteps, jSize, k+1, &conditions,
 							  timeToMakeGNUPlots, name, 0.0, 20.0,
-							   u0Triangle, AnalyticalTriangle);
+							   u0Triangle, AnalyticalTriangle,
+									  &AnalyticalTriangleIntegrand);
 //	initialStates.push_back(&triangleInitialState);
 
 
 	name = "StepDown";
 	InitialState stepDownInitialState(spatialSteps, 1, k+1, &conditions,
 							  timeToMakeGNUPlots, name, 0.0, 20.0,
-							   u0StepDown, AnalyticalStepDown);
+							   u0StepDown, AnalyticalStepDown,
+									  &AnalyticalStepDownIntegrand);
 	initialStates.push_back(&stepDownInitialState);
 
 	//Streams
@@ -526,3 +555,86 @@ double u0Triangle(double x, int l, double h, double lN1, double lN2)
 		else
 			return intervalN1 + intervalN2;
 }
+
+
+double AnalyticalStepDownIntegrand(double * variables, size_t dim, void * params)
+{
+	(void)(dim); /* avoid unused parameter warnings */
+		struct my_f_params * fp = (struct my_f_params *)params;
+	  if ((fp->lN1 < variables[1]) && (variables[1] < 0.5 * variables[0]))
+			{
+			return 1.0;
+			}
+		  else
+		  {
+			  return 0.0;
+		  }
+}
+
+double AnalyticalTriangleIntegrand(double * variables, size_t dim, void * params)
+{
+	(void)(dim); /* avoid unused parameter warnings */
+	struct my_f_params * fp = (struct my_f_params *)params;
+
+		double t;
+		t = variables[0];
+
+		double x;
+		x = variables[1];
+
+		double lN1;
+		lN1 = fp->lN1;
+
+		double lN2;
+		lN2 = fp->lN2;
+
+		assert(!std::isnan   (lN1));
+		assert(!std::isinf   (lN1));
+		assert( std::isfinite(lN1));
+
+		assert(!std::isnan   (lN2));
+		assert(!std::isinf   (lN2));
+		assert( std::isfinite(lN2));
+
+		assert(!std::isnan   (x));
+		assert(!std::isinf   (x));
+		assert( std::isfinite(x));
+
+		assert(!std::isnan   (t));
+		assert(!std::isinf   (t));
+		assert( std::isfinite(t));
+
+			if (t == 0)
+			{
+					if ((lN1 <= x) && (x <= (0.5 * (lN1 + lN2))))
+							return (2 * (x - lN1)) / (lN2 - lN1 + 2.0);
+
+					if (((0.5 * (lN1 + lN2)) < x) && ( x <= lN2))
+							return (2 * (lN2 - x)) / (lN2 - lN1 - 2.0);
+
+					if (!((lN1 <= x) && (x <= lN2)))
+							return 0.0;
+
+			}
+
+			if (( 0.0 < t) && (t <= (0.5 * (lN2 - lN1))))
+			{
+					if ((lN1 <= x) && (x <= (0.5 * (lN1 + lN2) + t)))
+							return (2 * (x - lN1)) / (lN2 - lN1 + 2.0 * t);
+
+					if (((0.5 * (lN1 + lN2) + t) < x) && ( x <= lN2))
+							return (2 * (lN2 - x)) / (lN2 - lN1 - 2.0 * t);
+
+					if (!((lN1 <= x) && (x <= lN2)))
+							return 0.0;
+			}
+
+			if (( 0.5 * (lN2 - lN1)) < t)
+			{
+					if ((lN1 <= x) && (x <= sqrt(0.5 * (lN2 - lN1) * (lN2 - lN1 + 2.0 * t))))
+							return ((2.0 * (x - lN1))/(lN2 - lN1 + 2.0 * t));
+					return 0.0;
+			}
+			//throw std::range_error("triangle error");
+	}
+
