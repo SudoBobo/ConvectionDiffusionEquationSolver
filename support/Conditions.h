@@ -10,7 +10,7 @@ public:
 	Conditions(const double spatialStep, const double timeStep,
 			   const double spatialSteps, const double timeSteps,
 			   const double a, const double b, const double T,
-			   const int k);
+			   const int k, const double courantNumber);
 	Conditions(const Conditions * anotherConditions);
 	double getSpatialStep() const;
 	double getTimeStep() const;
@@ -20,6 +20,7 @@ public:
 	double getB() const;
 	double getT() const;
 	int getK() const;
+	double getCourantNumber () const;
 
 private:
 	double m_spatialStep;
@@ -30,6 +31,7 @@ private:
 	double m_b;
 	double m_T;
 	int m_k;
+	double m_courantNumber;
 };
 
 #endif // CONDITIONS_H

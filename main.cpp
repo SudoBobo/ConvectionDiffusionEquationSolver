@@ -81,10 +81,10 @@ int main ()
 	std::cout << "Full time = " << T << "seconds" << std::endl;
 	std::cout << "TimeStep = " << timeStep << std::endl;
 //fine
-	const int k = 1;
+	const int k = 0;
 
 	Conditions conditions(spatialStep, timeStep, spatialSteps, timeSteps, a, b,
-						  T, k);
+						  T, k, courantNumber);
 	Problem problem;
 //fine
 	std::vector <int> timeToMakeGNUPlots = {0, 10};
@@ -100,7 +100,7 @@ int main ()
 							  timeToMakeGNUPlots, name, 0.0, 20.0,
 							   u0Triangle, AnalyticalTriangle,
 									  &AnalyticalTriangleIntegrand);
-//	initialStates.push_back(&triangleInitialState);
+	initialStates.push_back(&triangleInitialState);
 
 
 	name = "StepDown";

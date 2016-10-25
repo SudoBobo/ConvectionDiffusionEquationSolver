@@ -8,7 +8,7 @@ Conditions::Conditions(const double spatialStep, const double timeStep)
 
 Conditions::Conditions(const double spatialStep, const double timeStep,
 					   const double spatialSteps, const double timeSteps,
-		   const double a, const double b, const double T, const int k)
+		   const double a, const double b, const double T, const int k, const double courantNumber)
 {
 	m_spatialStep = spatialStep;
 	m_timeStep = timeStep;
@@ -18,6 +18,7 @@ Conditions::Conditions(const double spatialStep, const double timeStep,
 	m_b = b;
 	m_T = T;
 	m_k = k;
+	m_courantNumber = courantNumber;
 
 }
 
@@ -31,6 +32,7 @@ Conditions::Conditions(const Conditions * anotherConditions)
 	m_b = anotherConditions->getB();
 	m_T = anotherConditions->getT();
 	m_k = anotherConditions->getK();
+	m_courantNumber = anotherConditions->getCourantNumber();
 }
 
 double Conditions::getSpatialStep() const
@@ -72,4 +74,9 @@ double Conditions::getT() const
 int Conditions::getK() const
 {
 	return m_k;
+}
+
+double Conditions::getCourantNumber() const
+{
+	return m_courantNumber;
 }

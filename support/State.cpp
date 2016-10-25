@@ -336,7 +336,7 @@ double State::sum() const
 	{
 		for (int i = 0; i < m_iSize; i++)
 		{
-			sum += m_state[i][1][0];
+			sum += m_state[i][0][0];
 		}
 	return sum;
 	}

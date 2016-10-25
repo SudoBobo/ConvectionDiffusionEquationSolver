@@ -113,11 +113,11 @@ static double sumForNorm;
 static double maxUForNorm;
 maxUForNorm = 0.0;
 static double tempMax;
-
+tempMax = 0;
 
 for (int t = 0; t <= timeSteps; t++)
 	{
-
+		// всё ли тут правильно с UMax?
 		tempMax = m_origState.UMax();
 		if (maxUForNorm < tempMax)
 		{
@@ -172,16 +172,24 @@ numericalSolutionIntegralNorm[2] = m_conditions->getSpatialStep() *
 								 sumForNorm;
 analyticalSolutionIntegralNorm[2] =initialState->integralNormUL1();
 
-numericalSolutionIntegralNorm[3] =
-		std::sqrt(m_conditions->getSpatialStep() *
-				  m_conditions->getTimeStep() *
-				  sumForNorm * sumForNorm);
+std::cout << "   " << std::endl;
+std::cout << "Integral norm for " << analyticalGeneralDirectoryName << std::endl;
+std::cout << "Courant number = " << m_conditions->getCourantNumber() << std::endl;
+std::cout << "UL1 -> " <<
+(numericalSolutionIntegralNorm[2] - analyticalSolutionIntegralNorm[2]) /
+		analyticalSolutionIntegralNorm[2]  << std::endl;
+std::cout << "   " << std::endl;
 
-analyticalSolutionIntegralNorm[3] = initialState->integralNormUL2();
+//numericalSolutionIntegralNorm[3] =
+//		std::sqrt(m_conditions->getSpatialStep() *
+//				  m_conditions->getTimeStep() *
+//				  sumForNorm * sumForNorm);
+
+//analyticalSolutionIntegralNorm[3] = initialState->integralNormUL2();
 
 
-static std::string solutionName;
-solutionName = analyticalGeneralDirectoryName;
+//static std::string solutionName;
+//solutionName =  analyticalGeneralDirectoryName;
 
 // пишем в файл и/или консоль
 //writeError(numericalSolutionIntegralNorm, analyticalSolutionIntegralNorm,
