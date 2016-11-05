@@ -48,29 +48,11 @@ double u0LeftTriangle(double x, int l, double h, double lN1, double lN2);
 double AnalyticalLeftTriangle (double lN1, double lN2, double x, double time);
 double AnalyticalLeftTriangleIntegrand(double * variables, size_t dim, void * params);
 
-//double
-//gg (double *k, size_t dim, void *p)
-//{
-//  (void)(dim); /* avoid unused parameter warnings */
-
-//	struct my_f_params * fp = (struct my_f_params *)p;
-//  if ((fp->lN1 < k[1]) && (k[1] < 0.5 * k[0]))
-//		{
-//		return 1.0;
-//		}
-//	  else
-//	  {
-//		  return 0.0;
-//	  }
-//  }
-
 
 
 
 int main ()
 {
-	// аналитическое решение генрирует
-	// добавить гну плот
 
 	const double a = 0.0;
 	const double b = 520.0;
@@ -110,14 +92,14 @@ int main ()
 							  timeToMakeGNUPlots, name, 0.0, 20.0,
 							   u0StepDown, AnalyticalStepDown,
 									  &AnalyticalStepDownIntegrand);
-	initialStates.push_back(&stepDownInitialState);
+//	initialStates.push_back(&stepDownInitialState);
 
 	name = "LeftTriangle";
 	InitialState leftTriangleInitialState(spatialSteps, 1, k+1, &conditions,
 							  timeToMakeGNUPlots, name, 0.0, 20.0,
 							   u0LeftTriangle, AnalyticalLeftTriangle,
 									  &AnalyticalLeftTriangleIntegrand);
-	initialStates.push_back(&leftTriangleInitialState);
+//	initialStates.push_back(&leftTriangleInitialState);
 
 	//Streams
 	GodunovStream godunovStream(& problem);
@@ -656,12 +638,14 @@ double u0LeftTriangle(double x, int l, double h, double lN1, double lN2)
 	xPrev = x - h * 0.5;
 	xNext = x + h * 0.5;
 
+	// вычисления ниже опираются на lN1 == 0
+	// Если это не так,то код надо переписать
 	switch (l)
 	{
 	case 0:
 		if ((lN1 < x) && (x < lN2))
 		{
-			return (xJnext * xJnext - xJprev * xJprev) / (2 * lN2);
+			return (xNext * xNext - xPrev * xPrev) / (2 * lN2);
 		}
 		else
 		{
@@ -670,13 +654,51 @@ double u0LeftTriangle(double x, int l, double h, double lN1, double lN2)
 	case 1:
 		if ((lN1 < x) && (x < lN2))
 		{
-
+			(6.0 / (h * h * lN2)) *
+				   ((std::pow(xNext, 3) - std::pow(xPrev, 3)) / 3.0 -
+					x * ((std::pow(xNext, 2) - std::pow(xPrev, 2)) / 2.0));
 		}
 		else
 		{
 			return 0.0;
 		}
+	}
 }
 
-double AnalyticalLeftTriangle (double lN1, double lN2, double x, double time);
-double AnalyticalLeftTriangleIntegrand(double * variables, size_t dim, void * params);
+double AnalyticalLeftTriangle (double lN1, double lN2, double x, double time)
+{
+	if ((lN1 <= x) && (x <= (lN1 + std::sqrt((lN2 - lN1) * (time + lN2 - lN1)))))
+	{
+		return (x - lN1) / (time + lN2 - lN1);
+	}
+	else
+	{
+		return 0.0;
+	}
+}
+
+
+double AnalyticalLeftTriangleIntegrand(double * variables, size_t dim, void * params)
+{
+	double x    = variables[1];
+	double time = variables[0];
+
+	(void)(dim); /* avoid unused parameter warnings */
+	struct my_f_params * fp = (struct my_f_params *)params;
+
+	double lN1;
+	lN1 = fp->lN1;
+
+	double lN2;
+	lN2 = fp->lN2;
+
+
+	if ((lN1 < x) && (x < (lN1 + std::sqrt((lN2 - lN1) * (time + lN2 - lN1)))))
+		{
+		return (x - lN1) / (time + lN2 - lN1);
+		}
+	else
+		{
+		return 0.0;
+		}
+}

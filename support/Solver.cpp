@@ -117,18 +117,7 @@ tempMax = 0;
 
 for (int t = 0; t <= timeSteps; t++)
 	{
-		// всё ли тут правильно с UMax?
-		tempMax = m_origState.UMax();
-		if (maxUForNorm < tempMax)
-		{
-			maxUForNorm = tempMax;
-		}
-		else
-		{
 
-		}
-
-		sumForNorm += m_origState.sum();
 
 		//!!
 		m_valueVectorForFileWriter = m_origState.makeValueVector();
@@ -155,6 +144,21 @@ for (int t = 0; t <= timeSteps; t++)
 		m_systemSolver->calcNextState(m_origState, m_newState);
 		m_origState = m_newState;
 		// correct
+		// всё ли тут правильно с UMax?
+		if (t > 2)
+		{
+			tempMax = m_origState.UMax();
+			if (maxUForNorm < tempMax)
+			{
+				maxUForNorm = tempMax;
+			}
+			else
+			{
+
+			}
+
+			sumForNorm += m_origState.sum();
+		}
 	}
 // count mistake
 // write in file

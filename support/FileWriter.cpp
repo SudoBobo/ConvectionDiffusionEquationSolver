@@ -100,7 +100,7 @@ void FileWriter::write(const int stepNumber) const
 			 << "\t\t";
 			for (int i = 0; i < m_source->size(); i++)
 			{
-			 foutN << std::scientific << m_source->operator [](i) << " " << 0 << " " << 0 << " ";
+			 foutN << std::scientific << m_source->operator [](i) << " " << m_source->operator [](i) << " " << m_source->operator [](i) << " ";
 			}
 			foutN << "\n";
 			foutN << "</DataArray>\n" << "</CellData>\n"<<
